@@ -94,11 +94,14 @@ Created: 2026-11-17
 		if (box.right > right - margin) shift = right - margin - box.right;
 		if (box.left + shift < left + margin) shift = left + margin - box.left;
 
-		// Measured on the screen, and said in the view's own pixels: a view is scaled as a
-		// whole, and a panel slid by the screen's measure in a view shown small fell short.
+		// Measured on the screen, and said in the panel's own pixels: a view is scaled as a
+		// whole, and the panel is as big as the bar it is in (its `zoom`), so a panel slid by
+		// the screen's measure fell short in a view shown small and went too far in a big bar.
+		const size = Number(getComputedStyle(panel).zoom) || 1;
+
 		panel.style.setProperty(
 			"--sdk-shift",
-			`${Math.round(shift / (view?.scale || 1))}px`
+			`${Math.round(shift / ((view?.scale || 1) * size))}px`
 		);
 	}
 
@@ -266,7 +269,14 @@ Created: 2026-11-17
 		color: var(--bar-on, #8ab4f8);
 	}
 
+	/*
+	 * As big as the bar it opens from: in a bar, the panel and everything in it are drawn at
+	 * the bar's own scale (`--s`, ../bar.css), as its button is. Without that a tall view's
+	 * bar, drawn about twice the size, opened a list of bets half the size of its buttons.
+	 * Outside a bar it is drawn as it is written.
+	 */
 	.sdk-popup-panel {
+		zoom: var(--s, 1);
 		position: absolute;
 		z-index: 20;
 		left: 50%;
