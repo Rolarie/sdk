@@ -16,6 +16,11 @@
  *         });
  *     </script>
  *
+ * A game that cannot finish loading says so (`loading.fail()`), and one from which nothing
+ * has arrived for twenty seconds is taken to have stalled: either way the screen says
+ * what has happened and offers to try again, which loads the page anew. A loading screen
+ * never just stops.
+ *
  *     <LoadingScreen {loading} title="Game Title" logo="./loading-logo.svg" look={{ ... }} />
  *
  * A client's page is rendered when it is built (./client-build.ts), so the screen is in
@@ -46,6 +51,12 @@ export interface Loading {
 	 */
 	done(): Promise<void>;
 	/**
+	 * Says the game cannot finish loading (its code or a picture did not come, the browser
+	 * would not draw it): the screen says so and offers to try again, which loads the page
+	 * anew. `why` goes to the console, for whoever is looking into it.
+	 */
+	fail(why?: unknown): void;
+	/**
 	 * The screen this fills: the loading screen's own, given by the component as an
 	 * attachment. A game never calls it.
 	 */
@@ -70,6 +81,15 @@ function drawn(): Promise<void> {
 	});
 }
 
+/** How long nothing may arrive before the screen offers to try again, in milliseconds. */
+const STALLED_MS = 20_000;
+
+/** What the screen says when it offers to try again. */
+const SAYS = {
+	stalled: "This is taking longer than usual.",
+	failed: "The game did not finish loading."
+};
+
 /** What a game tells its loading screen: made where the game starts, and given to the screen. */
 export function createLoading(): Loading {
 	let screen: HTMLElement | undefined;
@@ -82,6 +102,34 @@ export function createLoading(): Loading {
 	let direct = 0;
 	let shown = 0;
 	let waiting: number | undefined;
+	/** The screen is gone, or going: nothing more is said on it. */
+	let over = false;
+	let failed = false;
+	let stalling: number | undefined;
+
+	/**
+	 * Has the screen say what is wrong and offer to try again (its `data-problem` shows the
+	 * words and the button: ./loading.css). A game that has only stalled may still arrive,
+	 * and the screen then goes as it would have.
+	 */
+	function offerAgain(problem: keyof typeof SAYS) {
+		if (!screen || over) return;
+
+		screen.dataset.problem = problem;
+		const words = screen.querySelector<HTMLElement>(".sdk-loading-problem");
+		if (words) words.textContent = SAYS[problem];
+	}
+
+	/** Starts the wait again: something has arrived, so the game is not stalled. */
+	function stillComing() {
+		window.clearTimeout(stalling);
+		if (over || failed) return;
+
+		// Whatever it said while it waited is taken back.
+		if (screen?.dataset.problem === "stalled") delete screen.dataset.problem;
+
+		stalling = window.setTimeout(() => offerAgain("stalled"), STALLED_MS);
+	}
 
 	/** Draws the bar as full as what has settled makes it. */
 	function render() {
@@ -114,6 +162,7 @@ export function createLoading(): Loading {
 			total += weight;
 			const done = () => {
 				settled += weight;
+				stillComing();
 				renderSoon();
 			};
 			work.then(done, done);
@@ -122,14 +171,21 @@ export function createLoading(): Loading {
 		},
 
 		set(share) {
-			direct = Math.min(1, Math.max(0, share));
+			const next = Math.min(1, Math.max(0, share));
+			if (next > direct) stillComing();
+
+			direct = next;
 			renderSoon();
 		},
 
 		async done() {
+			over = true;
+			window.clearTimeout(stalling);
 			direct = 1;
 			render();
 			if (!screen) return;
+
+			delete screen.dataset.problem;
 
 			// What the game set up as it became ready (the stage's first picture, words in a
 			// typeface just arrived) is drawn over the next frames: the screen stays for them.
@@ -142,8 +198,24 @@ export function createLoading(): Loading {
 			screen.hidden = true;
 		},
 
+		fail(why) {
+			if (over || failed) return;
+
+			failed = true;
+			window.clearTimeout(stalling);
+			console.error("The game did not finish loading.", why ?? "");
+			offerAgain("failed");
+		},
+
 		screen(element) {
 			screen = element;
+			// A failure said before the screen was there is said on it now.
+			if (failed) offerAgain("failed");
+			else stillComing();
+
+			element
+				.querySelector<HTMLButtonElement>(".sdk-loading-again")
+				?.addEventListener("click", () => location.reload());
 			// The page's own script, which filled the bar as the code arrived, stops at this.
 			element.removeAttribute("data-waiting");
 			from = Math.min(1, Math.max(0, Number(element.dataset.shown) || 0));

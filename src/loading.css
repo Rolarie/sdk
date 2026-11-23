@@ -94,6 +94,48 @@
 	transform-origin: left;
 	transition: transform 200ms;
 }
+/* What has gone wrong and a way to try again: there only once the game has stalled or
+   cannot load. It keeps its room, so the logo, the name and the bar do not move when it comes. */
+.sdk-loading-trouble {
+	display: grid;
+	justify-items: center;
+	gap: 12px;
+	max-width: min(320px, 80vw);
+	text-align: center;
+	visibility: hidden;
+}
+.sdk-loading[data-problem] .sdk-loading-trouble {
+	visibility: visible;
+}
+.sdk-loading-problem {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 400;
+	letter-spacing: 0;
+	text-transform: none;
+	opacity: 0.85;
+}
+.sdk-loading-again {
+	min-height: 44px;
+	padding: 0 20px;
+	border: 1px solid currentColor;
+	border-radius: 999px;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-size: 15px;
+	letter-spacing: 0;
+	text-transform: none;
+	cursor: pointer;
+}
+.sdk-loading-again:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+/* The simplest form, a bar alone in a page's own stage, has no words. */
+.sdk-loading-contained .sdk-loading-trouble {
+	display: none;
+}
 @media (prefers-reduced-motion: reduce) {
 	.sdk-loading,
 	.sdk-loading-fill {
