@@ -29,3 +29,41 @@ export interface LitWin {
 	cells: readonly Cell[];
 	text?: string;
 }
+
+/**
+ * Where an amount written on a winning cell goes, and how big, so that all of it is read:
+ * an amount wider than `most` is drawn smaller to fit that, and one that would run past
+ * an edge of the board (which shows nothing outside itself) is moved in from it.
+ *
+ * `width` is the amount's width as written, `middle` the middle of its cell, and `board`
+ * the board's width, all in the stage's pixels. What comes back is the scale to draw it
+ * at and where its middle goes.
+ *
+ *     fitLabel({ width: 300, middle: 80, board: 800, most: 240 }); // { scale: 0.8, x: 120 }
+ */
+export function fitLabel(label: {
+	width: number;
+	middle: number;
+	board: number;
+	most: number;
+}): { scale: number; x: number } {
+	const scale = label.width > label.most ? label.most / label.width : 1;
+	const half = Math.min(label.width * scale, label.board) / 2;
+
+	return {
+		scale,
+		x: Math.max(half, Math.min(label.board - half, label.middle))
+	};
+}
+
+/**
+ * How big an amount is as it comes onto its cell, from 0 (it has just come) to 1 (it is
+ * there): it starts at half its size, swells a little past it, and settles. That it
+ * moves is what draws the eye to it.
+ */
+export function popScale(share: number): number {
+	const back = 1.70158;
+	const eased = 1 + (back + 1) * (share - 1) ** 3 + back * (share - 1) ** 2;
+
+	return 0.5 + 0.5 * eased;
+}

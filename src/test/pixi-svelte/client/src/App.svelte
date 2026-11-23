@@ -55,7 +55,12 @@ Created: 2026-11-17
 		height={100}
 		pictures={{ tile: "./tile.png" }}
 		label="A test drawing"
-		track={(work) => loading.track(work)}
+		track={(work) => {
+			// As a game's page does (GamePage.svelte): a stage that cannot be made is said on the screen.
+			work.catch((error: unknown) => loading.fail(error));
+
+			return loading.track(work);
+		}}
 		onready={(made) => {
 			app = made;
 			void loading.done().then(() => (document.body.dataset.ready = "true"));

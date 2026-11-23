@@ -103,6 +103,57 @@ test("the control bar in a story is the bar, and can be played", async ({ page }
 	expect(errors).toEqual([]);
 });
 
+test("what a bar's button opens is as big as the bar: the bets and autoplay in a tall view", async ({
+	page
+}) => {
+	const errors = await open(page, "sdk-control-bar--in-a-tall-view");
+	const bar = page.getByRole("group", { name: "Game controls" });
+	const game = (await page.locator(".game").boundingBox())!;
+	const height = async (thing: ReturnType<Page["locator"]>) =>
+		(await thing.boundingBox())!.height;
+
+	// The bets: each one about as tall as the bar's own buttons (40 to their 52), not half that,
+	// and the list of them inside the game.
+	const betButton = page.locator(".sdk-bar-betbutton");
+	await betButton.click();
+	const bets = page.getByRole("dialog", { name: "Bet" });
+	const oneBet = bets.getByRole("radio").first();
+	await expect(oneBet).toBeVisible();
+	const ratio = (await height(oneBet)) / (await height(betButton));
+	expect(ratio).toBeGreaterThan(0.7);
+	expect(ratio).toBeLessThan(0.85);
+	const list = (await bets.boundingBox())!;
+	expect(list.x).toBeGreaterThanOrEqual(game.x);
+	expect(list.x + list.width).toBeLessThanOrEqual(game.x + game.width);
+	expect(list.y).toBeGreaterThanOrEqual(game.y);
+	await bets.getByRole("radio", { name: "2.50", exact: true }).click();
+	await expect(page.getByText("Bet: 2.50")).toBeVisible();
+
+	// Autoplay's the same.
+	await bar.getByRole("button", { name: "Auto", exact: true }).click();
+	const plays = page.getByRole("dialog", { name: "Autoplay" });
+	const onePlay = plays.getByRole("radio").first();
+	await expect(onePlay).toBeVisible();
+	expect((await height(onePlay)) / (await height(betButton))).toBeGreaterThan(0.7);
+	const panel = (await plays.boundingBox())!;
+	expect(panel.x).toBeGreaterThanOrEqual(game.x);
+	expect(panel.x + panel.width).toBeLessThanOrEqual(game.x + game.width);
+
+	// In a wide view, at the usual size, a popup is as it was written.
+	await open(page, "sdk-control-bar--left-alone");
+	await page
+		.getByRole("group", { name: "Game controls" })
+		.getByRole("button", { name: "Auto", exact: true })
+		.click();
+	const wide = page
+		.getByRole("dialog", { name: "Autoplay" })
+		.getByRole("radio")
+		.first();
+	const scale = (await page.locator(".game").boundingBox())!.width / 1600;
+	expect(Math.abs((await height(wide)) - 40 * scale)).toBeLessThan(1);
+	expect(errors).toEqual([]);
+});
+
 test("a board of reels and a studio's own piece are drawn in their stories", async ({
 	page
 }) => {

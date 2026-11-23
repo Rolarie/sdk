@@ -115,3 +115,44 @@ test("the stage is drawn in the game's own measure, whatever room it is given", 
 	await page.locator("canvas").click({ position: { x: 240, y: 140 } });
 	expect((await read(page)).pressed).toBe("1");
 });
+
+test("a picture that does not come is asked for again, and a game that cannot load says so and offers to try again", async ({
+	page
+}) => {
+	// The picture's first asking is lost, as a phone's connection loses one now and then.
+	let askings = 0;
+	await page.route("**/tile.png", (route) =>
+		++askings === 1 ? route.abort() : route.continue()
+	);
+	await page.goto(served.url);
+	await expect(page.locator('body[data-ready="true"]')).toBeAttached({
+		timeout: 20_000
+	});
+	await expect(page.locator(".sdk-loading")).toBeHidden();
+	expect(askings).toBeGreaterThanOrEqual(2);
+	expect((await read(page)).picture).toBe(PICTURE);
+
+	// It never comes: the screen stays, says what has happened, and offers to try again.
+	await page.unroute("**/tile.png");
+	await page.route("**/tile.png", (route) => route.abort());
+	await page.goto(served.url);
+	const screen = page.locator(".sdk-loading");
+	const again = screen.getByRole("button", { name: "Try again" });
+	// Not while it is still asking: the words and the button come only with the failure.
+	await expect(again).toBeHidden();
+	await expect(screen.getByRole("status")).toHaveText(
+		"The game did not finish loading.",
+		{ timeout: 20_000 }
+	);
+	await expect(again).toBeVisible();
+	await expect(screen).toBeVisible();
+	expect(await page.locator("body").getAttribute("data-ready")).toBeNull();
+
+	// Trying again loads the page anew, and with the picture there the game comes up.
+	await page.unroute("**/tile.png");
+	await again.click();
+	await expect(page.locator('body[data-ready="true"]')).toBeAttached({
+		timeout: 20_000
+	});
+	await expect(page.locator(".sdk-loading")).toBeHidden();
+});

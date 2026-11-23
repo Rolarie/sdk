@@ -7,6 +7,9 @@
  * removes `data-waiting`) and fills what is left of the bar from what the game tracks, and
  * this has nothing left to fill.
  *
+ * If none of the code arrives for twenty seconds it has the screen say so and offer to try
+ * again: a game whose code never comes has nothing else that could.
+ *
  * It also tells the site the page has something to show (`drawn`, ./protocol.ts): a
  * browser gives a frame a white ground until its page has drawn, so the site keeps the
  * frame out of sight until then. `__PROTOCOL__` is written in by the build.
@@ -34,6 +37,34 @@
 		setTimeout(drawn, 250);
 	};
 	drawn();
+
+	/** How long nothing may arrive before the screen offers to try again, in milliseconds (./loading.ts has the same). */
+	const STALLED_MS = 20_000;
+
+	// The way to try again loads the page anew, whoever shows it: this, or the game's own
+	// code once it runs (./loading.ts).
+	screen
+		.querySelector(".sdk-loading-again")
+		?.addEventListener("click", () => location.reload());
+
+	let stalling;
+
+	/**
+	 * Starts the wait again: some of the game's code has arrived. If none of it does for
+	 * long enough, and the game's own code has still not run (it may never have come, and
+	 * then nothing but this could say so), the screen offers to try again.
+	 */
+	const stillComing = () => {
+		clearTimeout(stalling);
+		stalling = setTimeout(() => {
+			if (!screen.hasAttribute("data-waiting")) return;
+
+			screen.dataset.problem = "stalled";
+			const words = screen.querySelector(".sdk-loading-problem");
+			if (words) words.textContent = "This is taking longer than usual.";
+		}, STALLED_MS);
+	};
+	stillComing();
 
 	// Each file of the game's code by its whole address, as the browser reports it, and its size.
 	const sizes = new Map();
@@ -73,6 +104,7 @@
 			if (sizes.has(entry.name)) arrived.add(entry.name);
 		}
 
+		stillComing();
 		fill();
 	}).observe({ type: "resource", buffered: true });
 })();

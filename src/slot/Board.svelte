@@ -12,6 +12,9 @@ A grid is its reels, left to right, each from the top down, as the maths has it
     await board.spin(event.grid);
     board.showWins(event.wins.map((win) => ({ cells: win.cells, text: amount(win) })));
 
+The amounts are what a player follows a round by, so they are written large (a third of a
+cell, unless `labelStyle` says otherwise) and come on with a swell.
+
 Author: dwclake
 Created: 2026-11-17
 -->
@@ -28,7 +31,7 @@ Created: 2026-11-17
 	import { placeLabels } from "../labels.ts";
 	import { getStage, place, type DisplayProps } from "../pixi/stage.svelte.ts";
 	import type { Cell, Grid } from "../slots.ts";
-	import type { LitWin, Pace } from "./board.ts";
+	import { fitLabel, popScale, type LitWin, type Pace } from "./board.ts";
 	import { createTweens, steady } from "./tween.ts";
 
 	interface Props extends DisplayProps {
@@ -47,7 +50,10 @@ Created: 2026-11-17
 		reelDelay?: number;
 		/** How long symbols take to fall. */
 		fallTime?: number;
-		/** How an amount on a winning cell is set, as Pixi takes it. */
+		/**
+		 * How an amount on a winning cell is set, as Pixi takes it. Left out, it is white with
+		 * a dark edge, a third of a cell tall: big enough to be read at a glance, on any symbol.
+		 */
 		labelStyle?: TextStyleOptions;
 		/** Called as each reel stops, for a sound. */
 		onstop?: (reel: number) => void;
@@ -63,13 +69,17 @@ Created: 2026-11-17
 		spinTime = 600,
 		reelDelay = 120,
 		fallTime = 350,
-		labelStyle = { fill: 0xffffff, fontSize: 28, fontWeight: "600" },
+		labelStyle,
 		onstop,
 		...display
 	}: Props = $props();
 
 	/** How dim a cell that did not win is while wins are lit. */
 	const DIMMED = 0.3;
+	/** How long an amount takes to come onto its winning cell, in milliseconds. */
+	const POP = 260;
+	/** The most an amount is wide, in cells: a wider one is drawn smaller, to keep clear of its neighbours. */
+	const LABEL_CELLS = 1.9;
 	/** How many symbols pass before a reel lands, beyond the ones it shows. */
 	const PASSING = 6;
 
@@ -78,6 +88,18 @@ Created: 2026-11-17
 	);
 	const stepX = $derived(size.width + gap);
 	const stepY = $derived(size.height + gap);
+
+	/** How an amount is set where the game does not say. */
+	const ownLabelStyle = $derived.by((): TextStyleOptions => {
+		const least = Math.min(size.width, size.height);
+
+		return {
+			fill: 0xffffff,
+			fontSize: least * 0.34,
+			fontWeight: "800",
+			stroke: { color: 0x101114, width: least * 0.07, join: "round" }
+		};
+	});
 
 	const root = new Container();
 	const symbols = new Container();
@@ -360,23 +382,45 @@ Created: 2026-11-17
 
 	/**
 	 * Lights the cells of some wins, and writes each win's `text` on one of its own cells,
-	 * the cells chosen so that the amounts keep apart.
+	 * the cells chosen so that the amounts keep apart. Each amount comes on with a swell,
+	 * which is what draws the eye to it (with `instant`, it is simply there), is drawn
+	 * smaller where it would be wider than two cells, and is kept inside the board.
 	 */
-	export function showWins(wins: readonly LitWin[]): void {
+	export function showWins(
+		wins: readonly LitWin[],
+		{ instant = false }: Pick<Pace, "instant"> = {}
+	): void {
 		light(wins.flatMap((win) => win.cells));
+
+		const board = reels * stepX - gap;
+		const written: { label: Text; scale: number }[] = [];
 
 		placeLabels(wins.map((win) => win.cells)).forEach(([reel, row], index) => {
 			const text = wins[index].text;
 			if (!text) return;
 
-			const label = new Text({ text, style: labelStyle });
+			const label = new Text({ text, style: labelStyle ?? ownLabelStyle });
+			const { scale, x } = fitLabel({
+				width: label.width,
+				middle: reel * stepX + size.width / 2,
+				board,
+				most: size.width * LABEL_CELLS
+			});
 
 			label.anchor.set(0.5);
-			label.position.set(
-				reel * stepX + size.width / 2,
-				row * stepY + size.height / 2
-			);
+			label.position.set(x, row * stepY + size.height / 2);
+			label.scale.set(scale);
 			labels.addChild(label);
+			written.push({ label, scale });
+		});
+
+		if (instant || written.length === 0) return;
+
+		// Not waited for: the game holds the wins in view for as long as it means to, and a
+		// board told something else meanwhile has taken these amounts away.
+		void tweens.run({ duration: POP, ease: steady }, (share) => {
+			for (const { label, scale } of written)
+				if (!label.destroyed) label.scale.set(scale * popScale(share));
 		});
 	}
 
