@@ -60,7 +60,9 @@ Created: 2026-11-17
 
 <p class="buttons">
 	<button onclick={() => board?.spin(grid(), { instant })}>Spin</button>
-	<button onclick={() => board?.showWins([{ cells: topRow(), text: "1.50x" }])}>
+	<button
+		onclick={() => board?.showWins([{ cells: topRow(), text: "12.50" }], { instant })}
+	>
 		Light the top row
 	</button>
 	<button
