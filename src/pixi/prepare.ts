@@ -98,17 +98,88 @@ export async function makeApplication(
 	}
 }
 
-/** One picture, loaded by an image element and made into a texture. */
-async function pictureOf(src: string): Promise<Texture> {
+/** How often a picture is asked for before it is given up on, and how long each asking may take. */
+const PICTURE_TRIES = 3;
+const PICTURE_WAIT_MS = 15_000;
+/** How long a picture that has arrived is given to be decoded before it is used as it is. */
+const DECODE_WAIT_MS = 3_000;
+
+/** Settles when `work` does, or after `wait` milliseconds with `late`, whichever is first. */
+function within<Work>(
+	work: Promise<Work>,
+	wait: number,
+	late: () => Work
+): Promise<Work> {
+	return new Promise((resolve, reject) => {
+		const timer = setTimeout(() => resolve(late()), wait);
+
+		work.then(
+			(value) => {
+				clearTimeout(timer);
+				resolve(value);
+			},
+			(error: unknown) => {
+				clearTimeout(timer);
+				reject(error);
+			}
+		);
+	});
+}
+
+/** One asking for a picture: the image element once it has the picture, or `null` if it never came. */
+async function askForPicture(src: string): Promise<HTMLImageElement | null> {
 	const image = new Image();
 
 	// A client's page has an origin of its own (the frame is sandboxed), so its own files
 	// are another origin's to it: asked for as such, or the picture cannot be drawn with.
 	image.crossOrigin = "anonymous";
-	image.src = src;
-	await image.decode();
 
-	return new Texture({ source: new ImageSource({ resource: image }) });
+	const arrived = new Promise<boolean>((resolve) => {
+		image.onload = () => resolve(true);
+		image.onerror = () => resolve(false);
+	});
+
+	image.src = src;
+
+	if (!(await within(arrived, PICTURE_WAIT_MS, () => false))) {
+		// Let go of, so that a slow answer to this asking does not land after the next.
+		image.onload = image.onerror = null;
+		image.src = "";
+
+		return null;
+	}
+
+	// Decoded before it is drawn with, where the browser will: so the first frame does not
+	// wait on it. That it has arrived is what matters, though. Some browsers (Safari on a
+	// phone, for one) now and then refuse to decode a picture they then draw perfectly
+	// well, or never answer, and a game that waited on that never finished loading.
+	await within(
+		image.decode().catch(() => undefined),
+		DECODE_WAIT_MS,
+		() => undefined
+	);
+
+	return image.naturalWidth > 0 ? image : null;
+}
+
+/**
+ * One picture, loaded by an image element and made into a texture. Asked for again where
+ * it does not come (a phone's connection drops one request in many), and only then given
+ * up on, with an error that names it.
+ */
+async function pictureOf(src: string): Promise<Texture> {
+	for (let attempt = 1; attempt <= PICTURE_TRIES; attempt++) {
+		const image = await askForPicture(src);
+		if (image) return new Texture({ source: new ImageSource({ resource: image }) });
+
+		// A moment longer before each new asking.
+		if (attempt < PICTURE_TRIES)
+			await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+	}
+
+	throw new Error(
+		`A picture did not load: ${src.startsWith("data:") ? "(written out)" : src}`
+	);
 }
 
 /**

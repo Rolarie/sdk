@@ -59,4 +59,10 @@ Created: 2026-11-18
 	>
 		<div class="sdk-loading-fill"></div>
 	</div>
+	<!-- Shown only when the game has stalled or cannot load (`data-problem`, set by `loading`,
+	     which also writes the words): what has happened, and a way to try again. -->
+	<div class="sdk-loading-trouble">
+		<p class="sdk-loading-problem" role="status"></p>
+		<button type="button" class="sdk-loading-again">Try again</button>
+	</div>
 </div>

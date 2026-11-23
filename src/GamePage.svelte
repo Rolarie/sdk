@@ -30,7 +30,11 @@ Created: 2026-11-19
 	export interface GameProps<View = unknown, Progress = unknown> {
 		/** The site, or in a story something that plays rounds from the books in its place. */
 		host: GameHost<View, Progress>;
-		/** Follows a piece of work as it loads: hand it the stage's, and the loading screen's bar fills with it. */
+		/**
+		 * Follows a piece of work as it loads: hand it the stage's, and the loading screen's bar
+		 * fills with it. Work that fails here is taken to mean the game cannot be played: the
+		 * loading screen says so and offers to try again.
+		 */
 		track?: <Work>(work: Promise<Work>) => Promise<Work>;
 		/** Called once the game is ready to be played. */
 		onready?: () => void;
@@ -69,19 +73,55 @@ Created: 2026-11-19
 		host: GameHost<unknown, unknown>;
 	} | null>(null);
 
-	// Up first: the site's answer, the game's own code, and its typefaces.
-	onMount(async () => {
-		const typefaces = fonts.map((face) =>
-			loading.track(document.fonts.load(face).catch(() => null))
-		);
-		const [host, code] = await Promise.all([
-			loading.track(connect(), 2),
-			loading.track(game(), 2)
-		]);
-		await Promise.all(typefaces);
+	/** How often the game's code is asked for before it is given up on. */
+	const CODE_TRIES = 3;
 
-		loaded = { Game: code.default, host };
+	/**
+	 * The game's own code, asked for again where it does not come: a phone's connection
+	 * drops one request in many, and the game then never arrived.
+	 */
+	async function gameCode() {
+		for (let attempt = 1; ; attempt++) {
+			try {
+				return await game();
+			} catch (error) {
+				if (attempt === CODE_TRIES) throw error;
+
+				// A moment longer before each new asking.
+				await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+			}
+		}
+	}
+
+	// Up first: the site's answer, the game's own code, and its typefaces. Whatever of it
+	// does not come is said on the loading screen, which then offers to try again.
+	onMount(async () => {
+		try {
+			const typefaces = fonts.map((face) =>
+				loading.track(document.fonts.load(face).catch(() => null))
+			);
+			const [host, code] = await Promise.all([
+				loading.track(connect(), 2),
+				loading.track(gameCode(), 2)
+			]);
+			await Promise.all(typefaces);
+
+			loaded = { Game: code.default, host };
+		} catch (error) {
+			loading.fail(error);
+		}
 	});
+
+	/**
+	 * Follows a piece of the game's own loading (its stage, with its pictures). What the
+	 * game hands over here is what it cannot be played without, so if it fails the loading
+	 * screen says so: left alone, the bar filled and the game never came.
+	 */
+	function track<Work>(work: Promise<Work>): Promise<Work> {
+		work.catch((error: unknown) => loading.fail(error));
+
+		return loading.track(work, 2);
+	}
 </script>
 
 <svelte:head>
@@ -93,7 +133,7 @@ Created: 2026-11-19
 {#if loaded}
 	<loaded.Game
 		host={loaded.host}
-		track={(work: Promise<unknown>) => loading.track(work, 2)}
+		{track}
 		onready={() => {
 			document.body.dataset.ready = "true";
 			void loading.done();
