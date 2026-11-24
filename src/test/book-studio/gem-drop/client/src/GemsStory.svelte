@@ -5,8 +5,8 @@ Author: dwclake
 Created: 2026-11-17
 -->
 <script lang="ts">
-	import { Stage, Text } from "@keros3ne/sdk/pixi";
-	import { Meter } from "@keros3ne/sdk/slot";
+	import { Stage, Text } from "@rolarie/sdk/pixi";
+	import { Meter } from "@rolarie/sdk/slot";
 
 	let { gems = 4 }: { gems?: number } = $props();
 </script>

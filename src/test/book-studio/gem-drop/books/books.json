@@ -4,27 +4,27 @@
 		"bonus-steady": {
 			"rows": 5000,
 			"totalWeight": 281474976710011,
-			"digest": "3e5b0dc5885d819a4c1d53351e51250fff6623e4567d18ed2dc245c0dbb97c9c"
+			"digest": "faf365ba2a8ea9741d31b1a426fe0fda9fd65e4bbe52cf78de7c5f5e4a132495"
 		},
 		"bonus-wild": {
 			"rows": 5000,
 			"totalWeight": 281474976710450,
-			"digest": "d75582ddf56eb9d2c30ae3cb33426dbcda9e03547a61b089a5aba472f1c1a1eb"
+			"digest": "08ac84712ca74fe6d23a22baf5a8e67e7ad6ca6fe6273b1c354caded4f2ec308"
 		},
 		"bought": {
 			"rows": 1000,
 			"totalWeight": 281474976710876,
-			"digest": "ee5de82dff9f052465e78ef6631abe73381da0f76e8ec947974027ba95732d45"
+			"digest": "e63061c60e9e8dd3ccc03076e3fb5ad565d8b3236e3a3d3720f1a69850ddd60e"
 		},
 		"gem-pour": {
 			"rows": 2000,
 			"totalWeight": 281474976710574,
-			"digest": "cf10d5dc3bfc1ab032968b8f7a79157e2a410fcd3d177bc195fb1ff59585b97f"
+			"digest": "a14b2ae0e6770c0ffd376311b04e5e0e52253ea9be827cadfd80d19be92ce537"
 		},
 		"spin": {
 			"rows": 60000,
 			"totalWeight": 281474976730646,
-			"digest": "886e242acf3b2fb50abd1d33c8731b2c459f9ce0b6325be565b52cc10a6a7bf0"
+			"digest": "376fac01bc19fc21fae17d3ea9ab5ad287953314b43e18b10cf46ba1699ec368"
 		}
 	}
 }

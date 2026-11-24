@@ -7,7 +7,7 @@ Author: dwclake
 Created: 2026-11-19
 -->
 <script lang="ts">
-	import { formatKero } from "../kero.ts";
+	import { formatCoins } from "../coins.ts";
 	import type { SegmentLook } from "../look.ts";
 	import { dressItem, itemSize } from "./bar-item.ts";
 	import { getBar, popupOpens } from "./bar-state.svelte.ts";
@@ -46,7 +46,7 @@ Created: 2026-11-19
 		button="readout"
 		opens={opens()}
 		disabled={bar.locked}
-		name={`${bar.betName} ${formatKero(bar.cost ?? bar.stake)}. Press to choose a bet.`}
+		name={`${bar.betName} ${formatCoins(bar.cost ?? bar.stake)}. Press to choose a bet.`}
 	>
 		{#snippet face()}<span class="sdk-bar-readout sdk-bar-betvalue">
 				<span class="sdk-bar-label sdk-bar-betlabel">
@@ -55,12 +55,12 @@ Created: 2026-11-19
 						>
 							{name}
 						</span>{/each}
-				</span><output>{formatKero(bar.cost ?? bar.stake)}</output>
+				</span><output>{formatCoins(bar.cost ?? bar.stake)}</output>
 			</span>{/snippet}
 		<Choices
 			label="Bet"
 			grid={columns}
-			options={bar.bets.map((value) => ({ value, label: formatKero(value) }))}
+			options={bar.bets.map((value) => ({ value, label: formatCoins(value) }))}
 			value={bar.stake}
 			onchange={(value) => bar.setBet(value)}
 			onpick={() => popup?.close()}

@@ -8,7 +8,7 @@ Author: dwclake
 Created: 2026-11-19
 -->
 <script lang="ts">
-	import { TallView } from "@keros3ne/sdk/views";
+	import { TallView } from "@rolarie/sdk/views";
 	import Bar from "./Bar.svelte";
 	import Machine from "./Machine.svelte";
 	import type { ViewProps } from "./view-props.ts";

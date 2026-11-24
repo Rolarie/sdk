@@ -7,8 +7,8 @@
       "dependencies": {
         "@fontsource-variable/geist": "^5.3.0",
         "@fontsource-variable/geist-mono": "^5.3.0",
-        "@keros3ne/engine": "github:Keros3ne/engine#v0.11.1",
         "@noble/hashes": "^2.4.0",
+        "@rolarie/engine": "github:Rolarie/engine#v0.12.0",
         "@storybook/svelte-vite": "^10.6.7",
         "@sveltejs/adapter-static": "4.0.1",
         "@sveltejs/kit": "3.4.0",
@@ -121,8 +121,6 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@keros3ne/engine": ["@keros3ne/engine@github:Keros3ne/engine#a6085e5", { "dependencies": { "@noble/hashes": "^2.4.0", "valibot": "^1.5.0" }, "peerDependencies": { "svelte": "^5.57.2" } }, "Keros3ne-engine-a6085e5", "sha512-V0FPUspfD9gIEKLRG5G4PW0GQeBXAEO7K64EO3NdJFegXtz8alx9M+Cx2bZbb885wV8T+4tthU167KnuLXizrg=="],
-
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.6", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || 2.0.0-beta.2", "@emnapi/runtime": "^1.7.1 || 2.0.0-beta.2" } }, "sha512-mRyDmEw9/fCDXCGfL1sbgIw/GUK0PVxRW4YwgPN61F3LQ+fSyoBFarJVzgGyhF6kRzEQZ0FejDqm4WLXSeqQmw=="],
 
     "@noble/hashes": ["@noble/hashes@2.4.0", "", {}, "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA=="],
@@ -210,6 +208,8 @@
     "@playwright/test": ["@playwright/test@1.65.1", "", { "dependencies": { "playwright": "1.65.1" }, "bin": { "playwright": "cli.js" } }, "sha512-y+NCIRm2LvY4slUVWvGh1nujJ8RF/hEisIsq2mtUPgdQC4L701bq5hZGMhrpeXjACvwvO9tj5dJqhvM6TP9lbw=="],
 
     "@polka/url": ["@polka/url@1.0.0-next.29", "", {}, "sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww=="],
+
+    "@rolarie/engine": ["@rolarie/engine@github:Rolarie/engine#fe67bda", { "dependencies": { "@noble/hashes": "^2.4.0", "valibot": "^1.5.0" }, "peerDependencies": { "svelte": "^5.57.2" } }, "Rolarie-engine-fe67bda", "sha512-DY04Ry5twLFw9WtE9MJqKeaaojjfugfWsGbU7IUzzOAv1261t09mW8hBcs7J6e6+PoLN6Wfzz7RAZF9JTzscSw=="],
 
     "@rolldown/binding-android-arm-eabi": ["@rolldown/binding-android-arm-eabi@1.2.19", "", { "os": "android", "cpu": "arm" }, "sha512-e+Ebe0WT+9tbXmNKPIiC8YrWAHYwug3m6i4p3rZGGulfZri1jtI4HslT+OZnFf/OIHowWF71DTlHwXBP2SiA7A=="],
 

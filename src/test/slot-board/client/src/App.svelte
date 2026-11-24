@@ -9,10 +9,10 @@ Created: 2026-11-17
 -->
 <script lang="ts">
 	import { Rectangle, type Application } from "pixi.js";
-	import { provideEmitter } from "@keros3ne/sdk/emitter";
-	import { playSteps, type Handlers } from "@keros3ne/sdk/events";
-	import { Stage } from "@keros3ne/sdk/pixi";
-	import { Meter } from "@keros3ne/sdk/slot";
+	import { provideEmitter } from "@rolarie/sdk/emitter";
+	import { playSteps, type Handlers } from "@rolarie/sdk/events";
+	import { Stage } from "@rolarie/sdk/pixi";
+	import { Meter } from "@rolarie/sdk/slot";
 	import Reels from "./Reels.svelte";
 	import {
 		HELD_FALL,

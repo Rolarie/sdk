@@ -121,7 +121,7 @@ describe("a client's build", () => {
 		expect(has(filler![1])).toBe(true);
 		// It tells the site the page has something to show, in the protocol the site speaks.
 		expect(read(filler![1])).toContain(
-			`{ protocol: "keros3ne-game/3", type: "drawn" }`
+			`{ protocol: "rolarie-game/3", type: "drawn" }`
 		);
 		expect(read(filler![1])).not.toContain("__PROTOCOL__");
 		expect(page.indexOf(filler![0])).toBeLessThan(page.indexOf("modulepreload"));

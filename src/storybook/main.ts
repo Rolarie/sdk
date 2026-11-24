@@ -1,5 +1,5 @@
 /**
- * The SDK's Storybook: what `keros3ne-studio stories` runs. It shows the stories a studio
+ * The SDK's Storybook: what `rolarie-studio stories` runs. It shows the stories a studio
  * has written beside its games' clients (`*.stories.ts`), and the SDK's own, of the
  * pieces every game shares. It is the SDK's as the client build is: a studio brings no
  * Storybook configuration, and none of its own is read.
@@ -54,15 +54,15 @@ const config: StorybookConfig = {
 			// otherwise bundle it ahead as it does a finished package, and cannot.
 			exclude: [
 				...(viteConfig.optimizeDeps?.exclude ?? []),
-				"@keros3ne/sdk",
+				"@rolarie/sdk",
 				// And so are the packages the studio's games share.
 				...Object.keys(readManifest(root).packages ?? {})
 			],
 			// What the SDK itself draws with is a finished package, and is still bundled ahead.
 			include: [
 				...(viteConfig.optimizeDeps?.include ?? []),
-				"@keros3ne/sdk > pixi.js",
-				"@keros3ne/sdk > pixi.js/unsafe-eval"
+				"@rolarie/sdk > pixi.js",
+				"@rolarie/sdk > pixi.js/unsafe-eval"
 			]
 		},
 		server: {
@@ -75,7 +75,7 @@ const config: StorybookConfig = {
 			},
 			watch: {
 				...viteConfig.server?.watch,
-				// What is made, not written. A client built again (`keros3ne-studio dev`
+				// What is made, not written. A client built again (`rolarie-studio dev`
 				// beside this, or a test) is a page of HTML changed, at which Vite reloads
 				// every story, in the middle of whatever it was playing. Books are data
 				// the server reads, and what is kept beside them is no story's concern.

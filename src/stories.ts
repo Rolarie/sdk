@@ -1,6 +1,6 @@
 /**
  * For a studio's stories: rounds from the game's real books, asked of the SDK's Storybook
- * while it runs (`keros3ne-studio stories`). A story plays what comes back through the
+ * while it runs (`rolarie-studio stories`). A story plays what comes back through the
  * game's own handlers, so a piece is seen doing what it will do on the site.
  *
  *   const { view } = await roundFromBooks({ slug: "stormglass" });
@@ -21,7 +21,7 @@ export type { Meta, StoryObj } from "@storybook/svelte-vite";
 import type { Counters } from "./book-round.ts";
 
 /** Where stories ask, on Storybook's own server: `/round` for a round, `/games` for the games. */
-export const STORY_BOOKS = "/__keros3ne/books";
+export const STORY_BOOKS = "/__rolarie/books";
 
 /** What a story asks for: a game, a way of opening a round, and what to pick in it. */
 export interface StoryRoundRequest {

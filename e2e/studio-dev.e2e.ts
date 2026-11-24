@@ -15,7 +15,7 @@ const STUDIO = "src/test/book-studio";
 const GAME = "reel-test";
 
 /**
- * `keros3ne-studio dev`, the SDK's stand-in for the site (src/dev.ts), on a copy of the
+ * `rolarie-studio dev`, the SDK's stand-in for the site (src/dev.ts), on a copy of the
  * test studio's game and its books: a copy, so that its rebuilds never touch the game itself.
  * Under test-results, so that it finds the SDK in this repository. Each test starts its
  * own, on a port of its parallel slot (4200 and up), so that tests running at once never
@@ -114,7 +114,7 @@ test("dev plays a game against the stand-in, logs what the site would ignore, an
 			.evaluate(() =>
 				window.parent.postMessage(
 					{
-						protocol: "keros3ne-game/2",
+						protocol: "rolarie-game/2",
 						type: "open",
 						id: 9,
 						bet: -5,

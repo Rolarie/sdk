@@ -1,6 +1,6 @@
 /**
  * What a studio writes to have its books made: for each of a game's tables, how one round
- * drawn from it plays out. `keros3ne-studio` plays each table's rounds, weighs the rows
+ * drawn from it plays out. `rolarie-studio` plays each table's rounds, weighs the rows
  * they come to (./book-weights.ts) and writes the books (./book-maker.ts). This is the
  * only code of a studio's that decides anything, and it runs on the studio's machine and
  * nowhere else: the site is sent the books.

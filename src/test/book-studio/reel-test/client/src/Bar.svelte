@@ -7,7 +7,7 @@ Author: dwclake
 Created: 2026-11-19
 -->
 <script lang="ts">
-	import { ControlBar } from "@keros3ne/sdk/controls";
+	import { ControlBar } from "@rolarie/sdk/controls";
 	import type { ReelTest } from "./game.svelte.ts";
 
 	interface Props {

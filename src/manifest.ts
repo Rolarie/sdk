@@ -34,7 +34,7 @@ import * as v from "valibot";
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const PACKAGE = /^(@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/;
 /** What every client is built with already: not a studio's to name. */
-const RESERVED = /^(@keros3ne\/|svelte$|pixi\.js$|vite$)/;
+const RESERVED = /^(@rolarie\/|svelte$|pixi\.js$|vite$)/;
 const slug = (what: string) =>
 	v.pipe(
 		v.string(),

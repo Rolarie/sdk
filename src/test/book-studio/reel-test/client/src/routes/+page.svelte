@@ -12,7 +12,7 @@ Author: dwclake
 Created: 2026-11-18
 -->
 <script lang="ts">
-	import GamePage from "@keros3ne/sdk/page";
+	import GamePage from "@rolarie/sdk/page";
 	import "../style.css";
 </script>
 

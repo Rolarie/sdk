@@ -15,7 +15,7 @@
 import { getContext, setContext } from "svelte";
 import { createEmitter, type Emitter, type Listener, type Typed } from "./events.ts";
 
-const KEY = Symbol("keros3ne-emitter");
+const KEY = Symbol("rolarie-emitter");
 
 export type { Emitter };
 

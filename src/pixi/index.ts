@@ -6,7 +6,7 @@
  *   <Stage width={1600} height={1000} pictures={{ lantern: "./art/lantern.png" }}>
  *     <Container x={200} y={100}>
  *       <Sprite texture="lantern" anchor={0.5} />
- *       <Text text="1.50 KC" y={80} style={{ fill: 0xffffff, fontSize: 32 }} />
+ *       <Text text="1.50 RC" y={80} style={{ fill: 0xffffff, fontSize: 32 }} />
  *     </Container>
  *   </Stage>
  *

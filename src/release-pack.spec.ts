@@ -29,7 +29,7 @@ import { fileDigest, installPackage } from "./game-package.ts";
 import { bookFiles, packGame, packedName } from "./release-pack.ts";
 
 const game = fileURLToPath(new URL("./test/book-studio/gem-drop", import.meta.url));
-const scratch = mkdtempSync(join(tmpdir(), "keros3ne-pack-"));
+const scratch = mkdtempSync(join(tmpdir(), "rolarie-pack-"));
 const studio = join(scratch, "studio", "gem-drop");
 const out = join(scratch, "release");
 afterAll(() => rmSync(scratch, { recursive: true, force: true }));
@@ -108,7 +108,7 @@ describe("a game, packed by its studio", () => {
 		);
 
 		expect(installed.checked.check.problems).toEqual([]);
-		expect(installed.record.protocol).toMatch(/^keros3ne-game\//);
+		expect(installed.record.protocol).toMatch(/^rolarie-game\//);
 		for (const [file, text] of Object.entries(BUILT))
 			expect(readFileSync(join(into, "client", file), "utf8")).toBe(text);
 		for (const file of ["books.json", "spin.rows", "gem-pour.index"])

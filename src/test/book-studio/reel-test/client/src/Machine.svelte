@@ -6,7 +6,7 @@ Author: dwclake
 Created: 2026-11-19
 -->
 <script lang="ts">
-	import { Stage } from "@keros3ne/sdk/pixi";
+	import { Stage } from "@rolarie/sdk/pixi";
 	import { REELS, ROWS } from "../../maths/rules";
 	import Reels from "./Reels.svelte";
 	import { PICTURES } from "./symbols.ts";

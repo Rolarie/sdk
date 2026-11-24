@@ -1,5 +1,5 @@
 /**
- * Where this copy of the SDK's command is: `keros3ne-studio`, as a file to run with Bun. A
+ * Where this copy of the SDK's command is: `rolarie-studio`, as a file to run with Bun. A
  * site that checks a studio's release runs the command of the SDK it depends on, and this
  * says which file that is, wherever that SDK was found: installed as a package, or a clone
  * a site is being developed against.

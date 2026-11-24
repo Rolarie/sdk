@@ -85,7 +85,7 @@ export function createStoryBooks(root: string) {
 /** The Vite plugin that puts the door in Storybook's own server. */
 export function storyBooksPlugin(root: string): Plugin {
 	return {
-		name: "keros3ne-story-books",
+		name: "rolarie-story-books",
 		configureServer(server) {
 			let books: ReturnType<typeof createStoryBooks> | undefined;
 

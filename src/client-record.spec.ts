@@ -97,13 +97,13 @@ describe("a built client", () => {
 		// that SDK's protocol.
 		const { protocol: _said, ...before } = record;
 		writeFileSync(join(folder, "client", "client.json"), JSON.stringify(before));
-		expect(readClientRecord(folder).protocol).toBe("keros3ne-game/2");
+		expect(readClientRecord(folder).protocol).toBe("rolarie-game/2");
 
 		// A client that speaks another protocol, or books in another format, is refused, and why.
-		rewrite({ protocol: "keros3ne-game/999" });
+		rewrite({ protocol: "rolarie-game/999" });
 		expect(unsupported(folder)).toEqual([
 			expect.stringMatching(
-				new RegExp(`speaks keros3ne-game/999, and this site speaks ${PROTOCOL}`)
+				new RegExp(`speaks rolarie-game/999, and this site speaks ${PROTOCOL}`)
 			)
 		]);
 		rewrite({});

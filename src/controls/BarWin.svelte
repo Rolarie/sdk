@@ -7,7 +7,7 @@ Author: dwclake
 Created: 2026-11-19
 -->
 <script lang="ts">
-	import { formatKero } from "../kero.ts";
+	import { formatCoins } from "../coins.ts";
 	import type { SegmentLook } from "../look.ts";
 	import { dressItem, itemSize } from "./bar-item.ts";
 	import { getBar } from "./bar-state.svelte.ts";
@@ -19,7 +19,7 @@ Created: 2026-11-19
 		size?: number;
 		/** The word over the amount. "Win", left out. */
 		label?: string;
-		/** Whether KC is written after the amount. It is, left out, where there is room. */
+		/** Whether RC is written after the amount. It is, left out, where there is room. */
 		unit?: boolean;
 	}
 
@@ -36,7 +36,7 @@ Created: 2026-11-19
 >
 	<div class="sdk-bar-readout sdk-bar-win" data-fresh={bar.winFresh ? "" : undefined}>
 		<span class="sdk-bar-label">{label}</span><output>
-			{formatKero(bar.win)}{#if unit}<span class="sdk-bar-unit">{" KC"}</span>{/if}
+			{formatCoins(bar.win)}{#if unit}<span class="sdk-bar-unit">{" RC"}</span>{/if}
 		</output>
 	</div>
 </div>

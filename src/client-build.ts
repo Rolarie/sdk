@@ -59,7 +59,7 @@ function ownFile(name: string): string {
 const WORK_FOLDER = ".svelte-kit";
 
 /** Where the build leaves what `finishClient` needs to know of the code it made. */
-const CODE_FILE = join(WORK_FOLDER, "keros3ne-code.json");
+const CODE_FILE = join(WORK_FOLDER, "rolarie-code.json");
 
 /** The folder of files SvelteKit names by what is in them, in a built client. */
 const NAMED = "_app/immutable";
@@ -118,7 +118,7 @@ interface CodeFile {
 /** Notes the code the browser's side of the build made, for `finishClient`. */
 function noteCode(client: string): Plugin {
 	return {
-		name: "keros3ne-note-code",
+		name: "rolarie-note-code",
 		apply: "build",
 
 		generateBundle(_options, bundle) {

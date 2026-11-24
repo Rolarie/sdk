@@ -1,6 +1,6 @@
 /// <reference types="bun" />
 /**
- * `keros3ne-studio dev <slug>`: a game played in a browser, run by the engine as a site runs it,
+ * `rolarie-studio dev <slug>`: a game played in a browser, run by the engine as a site runs it,
  * against the engine's stand-in for a site.
  *
  * Two processes. This one, the supervisor, keeps the client built (./client-build.ts) and runs
@@ -152,7 +152,7 @@ const page = (name: string) => `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${name.replace(/[<&]/g, "")}: keros3ne-studio dev</title>
+<title>${name.replace(/[<&]/g, "")}: rolarie-studio dev</title>
 <link rel="stylesheet" href="/host.css">
 </head>
 <body>

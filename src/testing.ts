@@ -21,7 +21,7 @@ export const CLIENT_FILE_MAX_BYTES = 5_000_000;
  * as the package.
  */
 const MATHS_IMPORTS =
-	/^(valibot|@keros3ne\/sdk\/(book-play|slots|rng|maths)|\.\/[\w./-]+)$/;
+	/^(valibot|@rolarie\/sdk\/(book-play|slots|rng|maths)|\.\/[\w./-]+)$/;
 
 /**
  * The same parts of the SDK under `#sdk/...`, a name of a package.json's own `imports`.
@@ -46,7 +46,7 @@ const importsOf = (source: string): string[] =>
 	);
 
 const isTest = (name: string) => /\.(spec|test)\.ts$/.test(name);
-/** A client's stories, which only Storybook loads (`keros3ne-studio stories`): never built into the client. */
+/** A client's stories, which only Storybook loads (`rolarie-studio stories`): never built into the client. */
 const isStory = (name: string) => /\.stories\.ts$/.test(name);
 /**
  * The problems with a game's maths folder, in words: an import it may not make, anything

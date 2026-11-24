@@ -64,7 +64,7 @@ try {
 	picture.position.set(100, 0);
 	picture.setSize(50, 50);
 
-	const word = new Text({ text: "KC", style: { fill: 0xffffff, fontSize: 24 } });
+	const word = new Text({ text: "RC", style: { fill: 0xffffff, fontSize: 24 } });
 	word.position.set(10, 60);
 
 	app.stage.addChild(shape, picture, word);

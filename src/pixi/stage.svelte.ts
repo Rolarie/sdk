@@ -11,7 +11,7 @@
 import { getContext, onDestroy, setContext, untrack } from "svelte";
 import type { Application, Container, FederatedPointerEvent, Ticker } from "pixi.js";
 
-const KEY = Symbol("keros3ne-pixi-stage");
+const KEY = Symbol("rolarie-pixi-stage");
 
 /** Where a piece is drawn: the application, and the container it goes into. */
 export interface StageContext {
