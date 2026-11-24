@@ -89,6 +89,7 @@ Created: 2026-11-17
 			scale={shape === "tall" ? scale * 2 : scale}
 			betAs={shape === "tall" ? "menu" : "steps"}
 			readouts={shape === "tall" ? "strip" : "bar"}
+			popups={shape === "tall" ? 1.5 : 1}
 			{hide}
 			{balance}
 			{win}

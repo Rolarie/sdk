@@ -23,7 +23,12 @@ Created: 2026-11-19
 	import { untrack, type Snippet } from "svelte";
 	import "../ui.css";
 	import "../bar.css";
-	import { BAR_SCALE, REQUIRED_ITEMS, type BarHandle } from "../bar-rules.ts";
+	import {
+		BAR_SCALE,
+		POPUP_SCALE,
+		REQUIRED_ITEMS,
+		type BarHandle
+	} from "../bar-rules.ts";
 	import { barProperties, dress, type BarLook } from "../look.ts";
 	import { getView } from "../view.svelte.ts";
 	import { BarState, provideBar, type BarOptions } from "./bar-state.svelte.ts";
@@ -33,6 +38,13 @@ Created: 2026-11-19
 		look?: BarLook;
 		/** Its size against the usual: from 0.8 to 2.5. A tall view's is about twice a wide one's. */
 		scale?: number;
+		/**
+		 * How big what its buttons open is (the bets, autoplay, the menu), against the bar
+		 * itself: from 1 to 2. As big as the bar, left out. A view shown small says more: a
+		 * tall view is shown on a phone at well under half its size, where a bet in a list
+		 * must still be as big as a thumb, so it passes about 1.5.
+		 */
+		popups?: number;
 		/** The player's balance, in cents. */
 		balance: number;
 		/**
@@ -66,6 +78,7 @@ Created: 2026-11-19
 	let {
 		look,
 		scale = 1,
+		popups = 1,
 		balance,
 		win,
 		busy,
@@ -141,6 +154,10 @@ Created: 2026-11-19
 		const sized = Math.max(BAR_SCALE.min, Math.min(BAR_SCALE.max, scale));
 
 		root.style.setProperty("--bar-s", String(Math.round(sized * 1000) / 1000));
+		root.style.setProperty(
+			"--bar-popups",
+			String(Math.max(POPUP_SCALE.min, Math.min(POPUP_SCALE.max, popups)))
+		);
 
 		// Rounded up, from the game's exact height (`clientHeight` is rounded to a whole pixel):
 		// a game drawing clear of the bar must never be a fraction of a pixel under it.
@@ -294,6 +311,7 @@ Created: 2026-11-19
 	// A bar made bigger or smaller is measured anew, and so is one whose view is scaled another way.
 	$effect(() => {
 		void scale;
+		void popups;
 		void view?.scale;
 		place();
 	});

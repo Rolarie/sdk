@@ -158,6 +158,9 @@ export const BET_ARRANGEMENTS: readonly BetArrangement[] = [
  */
 export const BAR_SCALE = { min: 0.8, max: 2.5 };
 
+/** How big what a bar's buttons open may be, against the bar (`popups`). */
+export const POPUP_SCALE = { min: 1, max: 2 };
+
 /**
  * The most characters a name for the bet may have (`betLabels`). The label is monospace, so
  * that many are no wider than the amount under it, and a name never widens the segment.

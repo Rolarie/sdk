@@ -103,7 +103,7 @@ test("the control bar in a story is the bar, and can be played", async ({ page }
 	expect(errors).toEqual([]);
 });
 
-test("what a bar's button opens is as big as the bar: the bets and autoplay in a tall view", async ({
+test("what a bar's button opens is as big as a view asks: the bets and autoplay in a tall view", async ({
 	page
 }) => {
 	const errors = await open(page, "sdk-control-bar--in-a-tall-view");
@@ -112,16 +112,17 @@ test("what a bar's button opens is as big as the bar: the bets and autoplay in a
 	const height = async (thing: ReturnType<Page["locator"]>) =>
 		(await thing.boundingBox())!.height;
 
-	// The bets: each one about as tall as the bar's own buttons (40 to their 52), not half that,
-	// and the list of them inside the game.
+	// The bets: each one taller than the bar's own buttons (a tall view asks for what its
+	// buttons open at half as big again: 60 to their 52), since a bet in a list is harder to
+	// hit with a thumb than a button by itself, and the list of them inside the game.
 	const betButton = page.locator(".sdk-bar-betbutton");
 	await betButton.click();
 	const bets = page.getByRole("dialog", { name: "Bet" });
 	const oneBet = bets.getByRole("radio").first();
 	await expect(oneBet).toBeVisible();
 	const ratio = (await height(oneBet)) / (await height(betButton));
-	expect(ratio).toBeGreaterThan(0.7);
-	expect(ratio).toBeLessThan(0.85);
+	expect(ratio).toBeGreaterThan(1.05);
+	expect(ratio).toBeLessThan(1.25);
 	const list = (await bets.boundingBox())!;
 	expect(list.x).toBeGreaterThanOrEqual(game.x);
 	expect(list.x + list.width).toBeLessThanOrEqual(game.x + game.width);
@@ -134,7 +135,7 @@ test("what a bar's button opens is as big as the bar: the bets and autoplay in a
 	const plays = page.getByRole("dialog", { name: "Autoplay" });
 	const onePlay = plays.getByRole("radio").first();
 	await expect(onePlay).toBeVisible();
-	expect((await height(onePlay)) / (await height(betButton))).toBeGreaterThan(0.7);
+	expect((await height(onePlay)) / (await height(betButton))).toBeGreaterThan(1.05);
 	const panel = (await plays.boundingBox())!;
 	expect(panel.x).toBeGreaterThanOrEqual(game.x);
 	expect(panel.x + panel.width).toBeLessThanOrEqual(game.x + game.width);
