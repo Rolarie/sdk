@@ -7,8 +7,8 @@ It is laid out one way, whatever size the game is shown at: a game is drawn at t
 its view (../WideView.svelte, ../TallView.svelte) and scaled as a whole, so nothing here
 measures the screen. What suits a view is said by the view, through props: `betAs="menu"`
 makes the bet one button that opens the bets on offer, and `readouts="strip"` puts the
-balance and the last win in a strip along the game's other edge. A tall view passes both;
-a wide one neither.
+balance and the last win in a strip along the game's other edge. A tall view passes both,
+and `popups` to make what its buttons open big enough for a thumb; a wide one none of them.
 
 What the bar shows is a prop (the balance, the last win, whether a round is under way),
 what the player sets comes back (`bind:bet`), and `bind:bar` hands over the bar itself,
@@ -63,6 +63,11 @@ Created: 2026-11-17
 		 * view says which suits it.
 		 */
 		readouts?: "bar" | "strip";
+		/**
+		 * How big what its buttons open is (the bets, autoplay, the menu), against the bar:
+		 * from 1 to 2. A tall view passes about 1.5, so that a bet in a list is as big as a thumb.
+		 */
+		popups?: number;
 		/** What to leave out: the menu (and the volume in it) and the last win, only. */
 		hide?: Hideable[];
 		/** The player's balance, in cents. */

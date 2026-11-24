@@ -270,13 +270,16 @@ Created: 2026-11-17
 	}
 
 	/*
-	 * As big as the bar it opens from: in a bar, the panel and everything in it are drawn at
-	 * the bar's own scale (`--s`, ../bar.css), as its button is. Without that a tall view's
-	 * bar, drawn about twice the size, opened a list of bets half the size of its buttons.
-	 * Outside a bar it is drawn as it is written.
+	 * As big as the bar it opens from, or bigger: in a bar, the panel and everything in it
+	 * are drawn at the bar's own scale (`--s`, ../bar.css), as its button is, times what the
+	 * bar says of what its buttons open (`--bar-popups`, the bar's `popups`). Without the
+	 * first a tall view's bar, drawn about twice the size, opened a list of bets half the
+	 * size of its buttons; without the second those bets were still smaller than a thumb on
+	 * a phone, where a choice in a list is harder to hit than a button by itself. Outside
+	 * a bar it is drawn as it is written.
 	 */
 	.sdk-popup-panel {
-		zoom: var(--s, 1);
+		zoom: calc(var(--s, 1) * var(--bar-popups, 1));
 		position: absolute;
 		z-index: 20;
 		left: 50%;
