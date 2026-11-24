@@ -228,6 +228,75 @@ describe("the books command", () => {
 	});
 });
 
+describe("the make command", () => {
+	const cli = fileURLToPath(new URL("./cli.ts", import.meta.url));
+
+	it("makes a game's books, builds its client, checks it and packs it, in that order", () => {
+		const studio = fileURLToPath(new URL("./test/book-studio", import.meta.url));
+		const out = mkdtempSync(join(tmpdir(), "keros3ne-made-"));
+		const record = join(studio, "reel-test", "client", "client.json");
+		const kept = readFileSync(record, "utf8");
+		const ran = spawnSync(
+			"bun",
+			[cli, "make", "reel-test", "--root", studio, "--out", out, "--workers", "2"],
+			{ encoding: "utf8" }
+		);
+		const packed = readdirSync(out);
+
+		rmSync(out, { recursive: true, force: true });
+
+		expect(ran.stderr).toBe("");
+		expect(ran.status).toBe(0);
+		// Each step is said, and done, before the next begins.
+		const said = [
+			"== books ==",
+			"reel-test: books made and checked",
+			"== client ==",
+			"reel-test: built",
+			"== check ==",
+			"reel-test: passes every check.",
+			"== pack ==",
+			"reel-test at 1.0.0: reel-test-1.0.0.tar.gz"
+		].map((words) => ran.stdout.indexOf(words));
+		expect(said).not.toContain(-1);
+		expect(said).toEqual([...said].sort((a, b) => a - b));
+		expect(packed).toEqual(["reel-test-1.0.0.tar.gz"]);
+
+		// The same source builds the client on record: making a game leaves nothing to commit.
+		expect(readFileSync(record, "utf8")).toBe(kept);
+	});
+
+	it("stops at the first step that fails, with nothing packed", () => {
+		// A studio of one folder that has maths and no manifest: its books cannot be made.
+		const studio = mkdtempSync(join(tmpdir(), "keros3ne-not-made-"));
+		mkdirSync(join(studio, "plain", "maths"), { recursive: true });
+		writeFileSync(join(studio, "plain", "maths", "index.ts"), "export default {};");
+		writeFileSync(
+			join(studio, "studio.json"),
+			JSON.stringify({
+				id: "fixture",
+				name: "Fixture",
+				blurb: "A studio for a test.",
+				sdk: "^0.11.0",
+				games: ["plain"]
+			})
+		);
+
+		const ran = spawnSync("bun", [cli, "make", "plain", "--root", studio], {
+			encoding: "utf8"
+		});
+		const packed = existsSync(join(studio, "release"));
+
+		rmSync(studio, { recursive: true, force: true });
+
+		expect(ran.status).toBe(1);
+		expect(ran.stderr).toContain("plain: it has no game.json");
+		expect(ran.stderr).toContain("Stopped at books: nothing was packed.");
+		expect(ran.stdout).not.toContain("== client ==");
+		expect(packed).toBe(false);
+	});
+});
+
 describe("a round's stream", () => {
 	it("depends on the seed, the table and the round, and nothing else", () => {
 		const draws = (seed: number, table: string, round: number) => {
