@@ -1,7 +1,7 @@
 {
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"customConditions": ["keros3ne-dev"],
+		"customConditions": ["rolarie-dev"],
 		"paths": {
 			"#engine/*": ["./local/engine/src/*"],
 			"valibot": ["./node_modules/valibot"]

@@ -1,23 +1,23 @@
-# Keros3ne studio SDK
+# Rolarie studio SDK
 
-Build games for Keros3ne, a social casino played with play money. This is the SDK
+Build games for Rolarie, a social casino played with play money. This is the SDK
 (`src/`): how a game's outcomes are made into books, the client's bridge to the site, the
 two views a game is drawn in, the stage, the board, the control bar and controls,
-Storybook, the site's own checks, and the command line, `keros3ne-studio`.
+Storybook, the site's own checks, and the command line, `rolarie-studio`.
 
 **Its README, [`src/README.md`](src/README.md), is the contract every game is held to.**
 
 ## Starting a game
 
 Start from the template repository,
-[Keros3ne/game-template](https://github.com/Keros3ne/game-template): press "Use this
+[Rolarie/game-template](https://github.com/Rolarie/game-template): press "Use this
 template" there. It is a complete small studio, Studio Name, with one game, Game Title, a
 three-reel slot kept deliberately simple, and its README walks through making it yours,
 building it and sending a release. You need [Bun](https://bun.sh).
 
 A studio keeps its games in as many repositories as it likes, one game to each or a few
 together, and each depends on the SDK at a tag
-(`"@keros3ne/sdk": "github:Keros3ne/sdk#v0.21.0"`). `bun x keros3ne-studio` is the command
+(`"@rolarie/sdk": "github:Rolarie/sdk#v0.21.0"`). `bun x rolarie-studio` is the command
 line a game's scripts run. This repository is not cloned to make a game: it is the package,
 and what a studio needs of it is installed with it.
 
@@ -41,11 +41,11 @@ is in `package.json`, and a release of it is a tag.
 
 ### The engine
 
-What plays a game is the engine's (`@keros3ne/engine`, a repository of its own that this
+What plays a game is the engine's (`@rolarie/engine`, a repository of its own that this
 one depends on at a tag): the random stream, the books and their checks, the manifest, the
 rules of a bet, and the bet pipeline a site plays every bet by. The SDK gives a studio
 those under its own names (`/rng`, `/book-play`, `/bets`, ...), so a studio imports
-everything it writes a game with from one package, and `keros3ne-studio dev` plays a game
+everything it writes a game with from one package, and `rolarie-studio dev` plays a game
 on the engine's stand-in: the same pipeline, over a store in memory.
 
 The page `dev` plays a game in says how smoothly it is drawn: frames a second now, the
@@ -59,7 +59,7 @@ To change the two together before either is released, clone the engine beside th
 repository and link it: `mkdir -p local && ln -s ../../engine local/engine`. Then
 `bun run local <script>` runs any script here on that clone (`bun run local test`,
 `bun run local test:browser`, `bun run typecheck:local`). The SDK reaches the engine
-through `imports` in `package.json` (`#engine/...`), whose `keros3ne-dev` condition names the
+through `imports` in `package.json` (`#engine/...`), whose `rolarie-dev` condition names the
 clone's files; without it, the same imports are the installed package.
 
 MIT licensed: see `LICENSE`.

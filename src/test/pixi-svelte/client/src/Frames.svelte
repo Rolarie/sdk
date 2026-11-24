@@ -5,7 +5,7 @@ Author: dwclake
 Created: 2026-11-17
 -->
 <script lang="ts">
-	import { onTick } from "@keros3ne/sdk/pixi";
+	import { onTick } from "@rolarie/sdk/pixi";
 
 	let { onframe }: { onframe: () => void } = $props();
 

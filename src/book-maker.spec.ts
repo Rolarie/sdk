@@ -34,7 +34,7 @@ import { playRound, type PlayedRound } from "./book-round.ts";
 import { createRng } from "./rng.ts";
 
 const game = fileURLToPath(new URL("./test/book-studio/gem-drop", import.meta.url));
-const scratch = mkdtempSync(join(tmpdir(), "keros3ne-maker-"));
+const scratch = mkdtempSync(join(tmpdir(), "rolarie-maker-"));
 afterAll(() => rmSync(scratch, { recursive: true, force: true }));
 
 describe("a game's books, made from its maths", () => {
@@ -202,7 +202,7 @@ describe("the books command", () => {
 
 	it("says so when a game named is not played from books", () => {
 		// A studio of one folder that has maths and no manifest.
-		const studio = mkdtempSync(join(tmpdir(), "keros3ne-no-books-"));
+		const studio = mkdtempSync(join(tmpdir(), "rolarie-no-books-"));
 		mkdirSync(join(studio, "plain", "maths"), { recursive: true });
 		writeFileSync(join(studio, "plain", "maths", "index.ts"), "export default {};");
 		writeFileSync(
@@ -233,7 +233,7 @@ describe("the make command", () => {
 
 	it("makes a game's books, builds its client, checks it and packs it, in that order", () => {
 		const studio = fileURLToPath(new URL("./test/book-studio", import.meta.url));
-		const out = mkdtempSync(join(tmpdir(), "keros3ne-made-"));
+		const out = mkdtempSync(join(tmpdir(), "rolarie-made-"));
 		const record = join(studio, "reel-test", "client", "client.json");
 		const kept = readFileSync(record, "utf8");
 		const ran = spawnSync(
@@ -268,7 +268,7 @@ describe("the make command", () => {
 
 	it("stops at the first step that fails, with nothing packed", () => {
 		// A studio of one folder that has maths and no manifest: its books cannot be made.
-		const studio = mkdtempSync(join(tmpdir(), "keros3ne-not-made-"));
+		const studio = mkdtempSync(join(tmpdir(), "rolarie-not-made-"));
 		mkdirSync(join(studio, "plain", "maths"), { recursive: true });
 		writeFileSync(join(studio, "plain", "maths", "index.ts"), "export default {};");
 		writeFileSync(

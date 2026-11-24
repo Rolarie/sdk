@@ -12,7 +12,7 @@
  */
 
 import { expect, test, type Page } from "@playwright/test";
-import { tumble } from "@keros3ne/sdk/slots";
+import { tumble } from "@rolarie/sdk/slots";
 import {
 	DROPS,
 	LANDED,

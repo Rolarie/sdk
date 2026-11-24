@@ -1,15 +1,15 @@
 #!/usr/bin/env bun
 /// <reference types="bun" />
 /**
- * keros3ne-studio: a studio's tools for building games for Keros3ne.
+ * rolarie-studio: a studio's tools for building games for Rolarie.
  *
- *   keros3ne-studio books [slug...]   make a game's books from its maths, and say what they hold
- *   keros3ne-studio client [slug...]  build a game's client, and put what was built on record
- *   keros3ne-studio check [slug...]   the site's checks: books, guide, maths, client
- *   keros3ne-studio pack [slug...]    pack each game into the one file a studio sends of it
- *   keros3ne-studio make [slug...]    all four, one after another: books, client, check, pack
- *   keros3ne-studio dev <slug>        play the game against a stand-in for the site
- *   keros3ne-studio stories           the studio's stories, and the SDK's own, in Storybook
+ *   rolarie-studio books [slug...]   make a game's books from its maths, and say what they hold
+ *   rolarie-studio client [slug...]  build a game's client, and put what was built on record
+ *   rolarie-studio check [slug...]   the site's checks: books, guide, maths, client
+ *   rolarie-studio pack [slug...]    pack each game into the one file a studio sends of it
+ *   rolarie-studio make [slug...]    all four, one after another: books, client, check, pack
+ *   rolarie-studio dev <slug>        play the game against a stand-in for the site
+ *   rolarie-studio stories           the studio's stories, and the SDK's own, in Storybook
  *
  * Run it in the studio's folder, which holds a folder for each game (studio-folder.ts), or
  * pass `--root <folder>`. It runs on Bun, which imports a game's TypeScript as it is.
@@ -31,32 +31,32 @@ import {
 } from "./studio-folder.ts";
 import { scanClient, scanClientSource, scanMaths } from "./testing.ts";
 
-const HELP = `keros3ne-studio: build games for Keros3ne
+const HELP = `rolarie-studio: build games for Rolarie
 
 Run it in the studio's folder: the one with studio.json, which lists the studio's games,
 each in a folder of its own beside it.
 
 Usage:
-  keros3ne-studio books [slug...]   play each game's maths into books, weigh them to
+  rolarie-studio books [slug...]   play each game's maths into books, weigh them to
                                     96%, run the site's check on them and say what
                                     they hold
-  keros3ne-studio client [slug...]  build each game's client, and write the record of
+  rolarie-studio client [slug...]  build each game's client, and write the record of
                                     what was built (client/client.json), to commit
-  keros3ne-studio check [slug...]   the site's checks on each game: its books, its
+  rolarie-studio check [slug...]   the site's checks on each game: its books, its
                                     guide, its maths, and its client as it was built
                                     and put on record
-  keros3ne-studio pack [slug...]    pack each game, checked, into the one file a studio
+  rolarie-studio pack [slug...]    pack each game, checked, into the one file a studio
                                     sends of it: <slug>-<version>.tar.gz, with its
                                     game.json, guide.json and card, its client as
                                     built, its books and any assets
-  keros3ne-studio make [slug...]    all four of those, one after another: each game's
+  rolarie-studio make [slug...]    all four of those, one after another: each game's
                                     books made, its client built, the checks run and
                                     the game packed. Stops at the first that fails,
                                     with nothing packed
-  keros3ne-studio dev <slug>        build the client as it changes, and play the game in a
+  rolarie-studio dev <slug>        build the client as it changes, and play the game in a
                                     browser against a stand-in for the site
 
-  keros3ne-studio stories           open Storybook on the studio's stories (*.stories.ts
+  rolarie-studio stories           open Storybook on the studio's stories (*.stories.ts
                                     beside a game's client) and the SDK's own, with
                                     rounds from the studio's real books to play in them
 
@@ -152,7 +152,7 @@ async function checkBooksOf(folder: GameFolder): Promise<string[]> {
 		problems.push(...checked.check.problems);
 	} catch (error) {
 		problems.push(
-			`its books could not be checked: ${errorText(error)} Make them with: keros3ne-studio books ${folder.slug}`
+			`its books could not be checked: ${errorText(error)} Make them with: rolarie-studio books ${folder.slug}`
 		);
 	}
 
@@ -370,7 +370,7 @@ async function packAllGames(
 		} catch (error) {
 			failed = true;
 			console.error(
-				`${folder.slug}: ${errorText(error)} Make its books with keros3ne-studio books ${folder.slug}, and build its client with keros3ne-studio client ${folder.slug}.`
+				`${folder.slug}: ${errorText(error)} Make its books with rolarie-studio books ${folder.slug}, and build its client with rolarie-studio client ${folder.slug}.`
 			);
 		}
 
@@ -393,7 +393,7 @@ async function packAllGames(
 async function checkFollows(root: string, slugs: string[], before: string) {
 	if (slugs.length !== 1) {
 		console.error(
-			"Name the one game: keros3ne-studio check <slug> --follows <game.json>"
+			"Name the one game: rolarie-studio check <slug> --follows <game.json>"
 		);
 
 		return 1;
@@ -600,7 +600,7 @@ async function main(argv: string[]): Promise<number> {
 		case "dev":
 		case "dev-serve": {
 			if (slugs.length !== 1) {
-				console.error("Name the one game to play: keros3ne-studio dev <slug>");
+				console.error("Name the one game to play: rolarie-studio dev <slug>");
 				return 1;
 			}
 			const port = Number(options.port ?? DEV_PORT);
@@ -613,8 +613,8 @@ async function main(argv: string[]): Promise<number> {
 			}
 			const balanceText =
 				typeof options.balance === "string" ? options.balance : "25.00";
-			const { parseKero } = await import("./kero.ts");
-			const balance = parseKero(balanceText);
+			const { parseCoins } = await import("./coins.ts");
+			const balance = parseCoins(balanceText);
 			if (!Number.isInteger(port) || port <= 0 || balance === null) {
 				console.error(
 					"--port is a number, and --balance an amount such as 25.00."

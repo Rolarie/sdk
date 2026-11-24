@@ -1,8 +1,8 @@
 /**
  * Whether the SDK is being run on the engine as it stands in the clone beside this
- * repository, and not the release installed: `KEROS3NE_DEV=1`, which `bun run local ...`
+ * repository, and not the release installed: `ROLARIE_DEV=1`, which `bun run local ...`
  * sets. The SDK imports the engine through `imports` in package.json (`#engine/...`), and
- * the `keros3ne-dev` condition there names the file in the clone (`local/engine`, a link that is
+ * the `rolarie-dev` condition there names the file in the clone (`local/engine`, a link that is
  * not committed). Bun and Node are told the condition on their command lines; Vite resolves
  * imports itself, so every Vite the SDK starts is told here.
  *
@@ -19,10 +19,10 @@ import type { UserConfig } from "vite";
 
 /**
  * Whether the SDK itself is being developed, on the engine as it stands in the clone beside
- * this repository: `KEROS3NE_DEV=1`. Its condition is `keros3ne-dev`, a name of its own, so
+ * this repository: `ROLARIE_DEV=1`. Its condition is `rolarie-dev`, a name of its own, so
  * that nothing a studio sets ever turns it on in an installed SDK, where there is no clone.
  */
-export const DEV = process.env.KEROS3NE_DEV === "1";
+export const DEV = process.env.ROLARIE_DEV === "1";
 
 /**
  * Whether a studio is trying packages of its own from their clones: `LOCAL_PACKAGES=1`,
@@ -32,7 +32,7 @@ export const LOCAL = process.env.LOCAL_PACKAGES === "1";
 
 /** The conditions in use, for whatever resolves an import itself. */
 export const LOCAL_CONDITIONS: string[] = [
-	...(DEV ? ["keros3ne-dev"] : []),
+	...(DEV ? ["rolarie-dev"] : []),
 	...(LOCAL ? ["local"] : [])
 ];
 
@@ -58,8 +58,8 @@ export function localResolve(): Pick<UserConfig, "resolve" | "ssr"> {
 				"@noble/hashes",
 				"svelte",
 				"pixi.js",
-				"@keros3ne/sdk",
-				"@keros3ne/engine"
+				"@rolarie/sdk",
+				"@rolarie/engine"
 			]
 		},
 		ssr: {

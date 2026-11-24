@@ -44,7 +44,7 @@ describe("a repository's manifest", () => {
 			{ kit: "--upload-pack=touch#v1" },
 			{ "Kit!": "https://github.com/studio-name/kit.git#v1" },
 			{ svelte: "https://github.com/studio-name/kit.git#v1" },
-			{ "@keros3ne/sdk": "https://github.com/studio-name/kit.git#v1" }
+			{ "@rolarie/sdk": "https://github.com/studio-name/kit.git#v1" }
 		])
 			expect(() => checkManifest("studio.json", { ...least, packages })).toThrow();
 	});

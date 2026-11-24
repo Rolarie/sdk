@@ -1,5 +1,5 @@
 <!--
-The page round a game in `keros3ne-studio dev`: a thin wrapper round the engine, which is
+The page round a game in `rolarie-studio dev`: a thin wrapper round the engine, which is
 what runs the game here exactly as it does on a site (its `GameFrame`: the sandboxed frame,
 the checks on every message, the choice of view, a result held back until it is shown).
 Bets are played by the engine's stand-in on the dev server, the same bet pipeline a site
@@ -19,7 +19,7 @@ Created: 2026-11-19
 	import type { GameSite, SiteReply } from "#engine/bridge.svelte";
 	import type { HistoryBet, RoundMessage } from "#engine/protocol";
 	import type { Shape } from "#engine/shapes";
-	import { formatKero, parseKero } from "../kero.ts";
+	import { formatCoins, parseCoins } from "../coins.ts";
 
 	/** What the dev server says of the game and of how things stand. */
 	interface State {
@@ -48,14 +48,14 @@ Created: 2026-11-19
 	const remember = {
 		get(key: string): string | null {
 			try {
-				return localStorage.getItem(`keros3ne-dev:${key}`);
+				return localStorage.getItem(`rolarie-dev:${key}`);
 			} catch {
 				return null;
 			}
 		},
 		set(key: string, value: string) {
 			try {
-				localStorage.setItem(`keros3ne-dev:${key}`, value);
+				localStorage.setItem(`rolarie-dev:${key}`, value);
 			} catch {
 				// Not kept: the page works the same without.
 			}
@@ -148,7 +148,7 @@ Created: 2026-11-19
 	async function setBalance(event: SubmitEvent) {
 		event.preventDefault();
 
-		const cents = parseKero(newBalance);
+		const cents = parseCoins(newBalance);
 		if (cents === null) {
 			balanceProblem = "An amount, like 25.00.";
 
@@ -199,7 +199,7 @@ Created: 2026-11-19
 	}
 </script>
 
-<svelte:head><title>{stands.game.name}: keros3ne-studio dev</title></svelte:head>
+<svelte:head><title>{stands.game.name}: rolarie-studio dev</title></svelte:head>
 
 <div class="page" {@attach follow}>
 	<header>
@@ -284,9 +284,9 @@ Created: 2026-11-19
 	<aside>
 		<section>
 			<h2>Balance</h2>
-			<strong class="figure">{formatKero(shown)}</strong>
+			<strong class="figure">{formatCoins(shown)}</strong>
 			<span class="note">
-				{#if held}{formatKero(stands.balance)} once the game says the result was shown{/if}
+				{#if held}{formatCoins(stands.balance)} once the game says the result was shown{/if}
 			</span>
 			<form class="row" onsubmit={setBalance}>
 				<input
@@ -312,7 +312,7 @@ Created: 2026-11-19
 				<dd>{stands.fairness.nonce}</dd>
 				<dt>Bets taken</dt>
 				<dd>
-					{formatKero(stands.limits.minStake)} to {formatKero(
+					{formatCoins(stands.limits.minStake)} to {formatCoins(
 						stands.limits.maxStake
 					)}
 				</dd>

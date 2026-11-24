@@ -9,8 +9,8 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { playingRng } from "@keros3ne/sdk/book-play";
-import { multiple, type GameGuide } from "@keros3ne/sdk/guide";
+import { playingRng } from "@rolarie/sdk/book-play";
+import { multiple, type GameGuide } from "@rolarie/sdk/guide";
 import books from "./index.ts";
 import { PAYS, STOPS, STRIP, SYMBOLS, linePays, showing, spinOf } from "./rules.ts";
 

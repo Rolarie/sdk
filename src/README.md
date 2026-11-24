@@ -1,9 +1,9 @@
-# @keros3ne/sdk
+# @rolarie/sdk
 
-Build games for Keros3ne, a social casino played with play money. This is the contract every
+Build games for Rolarie, a social casino played with play money. This is the contract every
 studio game is held to, and the tools to build one: how a game's outcomes are made into
 books, the client's bridge to the site, the stage, the control bar and controls, Storybook,
-the site's own checks, and `keros3ne-studio`, the command line to make a game's books, check
+the site's own checks, and `rolarie-studio`, the command line to make a game's books, check
 it and play it.
 
 A studio's game can be far richer than the site's own: its own graphics and sound, bonuses
@@ -11,7 +11,7 @@ a player takes part in, meters that last between bets, its own controls. It is s
 to every rule of the site, below.
 
 A studio starts from the template repository,
-[Keros3ne/game-template](https://github.com/Keros3ne/game-template): a complete small
+[Rolarie/game-template](https://github.com/Rolarie/game-template): a complete small
 studio, Studio Name, with one slot, Game Title, and everything a studio sends. Press "Use
 this template" there, and the SDK is a dependency of the repository it makes, at a tag. A
 studio takes the SDK's updates by naming a newer tag.
@@ -53,8 +53,8 @@ studio.json                 what this repository holds
 <shared>/                   anything this repository's clients share, named in "shared"
 ```
 
-The SDK is a dependency (`"@keros3ne/sdk": "github:Keros3ne/sdk#v0.14.0"`), and
-`keros3ne-studio` is its command line (`bun x keros3ne-studio check`). The SDK's own
+The SDK is a dependency (`"@rolarie/sdk": "github:Rolarie/sdk#v0.14.0"`), and
+`rolarie-studio` is its command line (`bun x rolarie-studio check`). The SDK's own
 repository is also a studio's repository, with one game, to read or to start from.
 
 `studio.json`:
@@ -68,7 +68,7 @@ repository is also a studio's repository, with one game, to read or to start fro
 ```
 
 - `studio.json` is for your own tools: it says what this repository holds, so that
-  `keros3ne-studio` knows where your games are. No site reads it, or anything else of
+  `rolarie-studio` knows where your games are. No site reads it, or anything else of
   your repository: a site is sent a game's package and nothing more.
 - `sdk` is the version of this SDK you built on, as a range: said for people, and held
   to nothing. You build your client with the SDK you wrote it for, and a site takes it
@@ -100,7 +100,7 @@ repository depends on at a tag.
 - A client imports its files by their paths: `import Sheet from "@studio-name/kit/Sheet.svelte"`.
 - The package is held to a client's rules: what it imports by a relative address is its
   own, and it loads nothing from the network. Its `package.json` has no `exports` and no build: say what
-  it needs as `peerDependencies` (`@keros3ne/sdk`, `svelte`), so that your package
+  it needs as `peerDependencies` (`@rolarie/sdk`, `svelte`), so that your package
   manager lets it find them.
 - A game is pinned to the tag it names. Releasing the package changes no game until that
   game's repository names the new tag, and the game is built, packed and sent again.
@@ -185,8 +185,8 @@ A game may keep meters for a player from one bet to the next:
 `maths/index.ts` exports, by default, how each table's rounds play out:
 
 ```ts
-import { defineBooks, type PlayedRow } from "@keros3ne/sdk/book-play";
-import { createRound } from "@keros3ne/sdk/slots";
+import { defineBooks, type PlayedRow } from "@rolarie/sdk/book-play";
+import { createRound } from "@rolarie/sdk/slots";
 
 function spin(rng): PlayedRow {
 	const round = createRound();
@@ -204,12 +204,12 @@ export default defineBooks({
 });
 ```
 
-- **Written with** `@keros3ne/sdk/book-play` and, for a slot,
-  `@keros3ne/sdk/slots`: grids from strips or weights, lines, ways, pays anywhere
+- **Written with** `@rolarie/sdk/book-play` and, for a slot,
+  `@rolarie/sdk/slots`: grids from strips or weights, lines, ways, pays anywhere
   and clusters, falls and free spins with their limits, and a recorder for a round's
   events. Keep the rules themselves in a file of their own (`rules.ts`), which the client
   may read to draw what the events say.
-- **Pure.** The maths imports those, `@keros3ne/sdk/rng`, `valibot` and its own
+- **Pure.** The maths imports those, `@rolarie/sdk/rng`, `valibot` and its own
   files, and nothing else. No clock, no network, no randomness of its own: a book must come
   out the same each time it is made. The scan (`scanMaths` in `/testing`) fails any file
   that so much as names `Math.random`, `Date.now`, `new Date`, `fetch`, `process`,
@@ -230,7 +230,7 @@ export default defineBooks({
   a game could have are in it only if one of those rounds landed on them. Play enough
   rounds, and give what is rare a table of its own.
 
-`keros3ne-studio books [slug...]` plays the maths into books, weighs them, runs the site's
+`rolarie-studio books [slug...]` plays the maths into books, weighs them, runs the site's
 check and prints what each table holds. Commit `books/books.json`, the record of them.
 
 A player's bet is checked in their own page: that the row it paid is the one its seeds
@@ -265,7 +265,7 @@ game window. It is written in Svelte and drawn with Pixi.
     client/client.json               the record of what was built (below)
 
 **How it is built.** A client is a SvelteKit app, built with adapter-static by the SDK
-(`keros3ne-studio client`, `buildClient` in `/client-build`): by you, where your code is,
+(`rolarie-studio client`, `buildClient` in `/client-build`): by you, where your code is,
 with the SDK you wrote it for. The site never builds your client and never runs your
 code; it serves the files you built. There is no build configuration of your own (no
 `vite.config`, `svelte.config` or `app.html`: `check` fails a client that has one): the
@@ -290,7 +290,7 @@ loading screen, answers the site, asks for the game's code in the browser (the b
 asks for that code from the start, with the rest), and hands the game `host`, `track` and
 `onready`.
 
-**What was built is put on record.** `keros3ne-studio client` builds each client into
+**What was built is put on record.** `rolarie-studio client` builds each client into
 `client/dist` (not committed) and writes `client/client.json` (committed): the digest of
 every file it built. `check` holds the built client to that record, and `pack` packs
 exactly that client, with every file's digest in the package for a site to hold it to. The
@@ -578,7 +578,7 @@ and refuses a client built for another version of the protocol.
 
         <!-- your WideView.svelte -->
         <script lang="ts">
-          import { WideView } from "@keros3ne/sdk/views";
+          import { WideView } from "@rolarie/sdk/views";
           let { game } = $props();
         </script>
 
@@ -632,7 +632,7 @@ Import it as `#kit/Bar.svelte` in the game, and link the clone once (`mkdir -p l
 ../../kit local/kit`; keep `local/` out of git). Then `bun run local dev` plays the game on
 the kit as it stands in its clone, and `bun run dev`, `bun run client` and a release are on
 the kit at its tag, as before. A client built with `local` says so in its `client.json`
-(`conditions`), since no tag of the kit made its files: `keros3ne-studio pack` refuses to
+(`conditions`), since no tag of the kit made its files: `rolarie-studio pack` refuses to
 pack one, and a site refuses to accept one. Build it again without `local` before a
 release.
 
@@ -647,16 +647,16 @@ and the History and Fairness panels under it. Those are how a player checks the 
 
 ## Stories
 
-`keros3ne-studio stories` opens Storybook on your studio: the stories you have written
+`rolarie-studio stories` opens Storybook on your studio: the stories you have written
 beside a game's client, and the SDK's own, of the pieces every game shares. The Storybook
 is the SDK's, as the client build is: you bring no configuration for it.
 
 - A story is a `*.stories.ts` file under a game's `client/`, in Storybook's usual form: a
   component and the props to show it with (`Meta` and `StoryObj` come from
-  `@keros3ne/sdk/stories`). A piece drawn on a stage needs the stage round
+  `@rolarie/sdk/stories`). A piece drawn on a stage needs the stage round
   it, so a story's component is usually a small Svelte file of its own (`ReelsStory.svelte`)
   that puts the piece on a `Stage` with a button or two to work it.
-- `roundFromBooks()` (`@keros3ne/sdk/stories`) hands a story a round played from the
+- `roundFromBooks()` (`@rolarie/sdk/stories`) hands a story a round played from the
   game's real books, as the site would play it. Play it through the game's own handlers
   (`playSteps`), and the story shows what a player will see. A round that stops at a choice
   says what may be picked: ask again with the same `seed` and the choice added.
@@ -665,13 +665,13 @@ is the SDK's, as the client build is: you bring no configuration for it.
 - Stories are never built into a client, and are not held to a client's rules: only
   Storybook loads them.
 
-Make a game's books first (`keros3ne-studio books`): a story cannot play from books that
-are not there. `keros3ne-studio dev` is still how a game is played whole, by the site's
+Make a game's books first (`rolarie-studio books`): a story cannot play from books that
+are not there. `rolarie-studio dev` is still how a game is played whole, by the site's
 rules; stories are for one piece, one event or one kind of round at a time.
 
 ## The command line
 
-`keros3ne-studio` is `src/cli.ts`, run with [Bun](https://bun.sh) in your studio's folder
+`rolarie-studio` is `src/cli.ts`, run with [Bun](https://bun.sh) in your studio's folder
 (or pass `--root <folder>`). The repository's scripts run it:
 
 ```sh
@@ -708,7 +708,7 @@ bun run stories             # your stories, and the SDK's own, in Storybook
 ## Sending a game
 
 **A game is sent as one file, and nothing else of yours goes with it.** No site sees the
-repository a game was made in: `keros3ne-studio pack` writes everything a site needs of
+repository a game was made in: `rolarie-studio pack` writes everything a site needs of
 a version of a game into `release/<slug>-<version>.tar.gz`, and that file is what you
 send.
 
@@ -726,16 +726,16 @@ game-title-1.2.0.tar.gz
 It is an ordinary archive, which `tar -xzf` opens, so you can see exactly what you are
 sending. The same game packs to the same bytes wherever it is packed, and `pack` says
 the file's digest. Nothing in this package reaches GitHub or anywhere else from your
-machine: `keros3ne-studio` reads and writes the files of your repository and no more.
+machine: `rolarie-studio` reads and writes the files of your repository and no more.
 
 1. Change the game, and raise `version` in its `game.json`: a site publishes a version
    once, and the next must come after it.
 2. Run `books`, `client`, `check` and your tests. `pack` holds the books to the whole
    check and the built client to its record (`client/client.json`) before it packs
    anything, so commit that record and `books/books.json` with the change.
-3. Run `keros3ne-studio pack <slug>`, and send Keros3ne the file.
+3. Run `rolarie-studio pack <slug>`, and send Rolarie the file.
 
-`keros3ne-studio make <slug>` does the commands of steps 2 and 3 in one: the game's books
+`rolarie-studio make <slug>` does the commands of steps 2 and 3 in one: the game's books
 made, its client built, the checks run and the game packed, one after another, stopping
 at the first that fails with nothing packed. Your own tests are still yours to run, and
 the two records still yours to commit.
@@ -758,7 +758,7 @@ up, of the new. A unit of a counter is worth its `worthBp` of the bet, and a sit
 the update only if nobody, whatever they held, is left holding less than they held, no
 counter is filled by the conversion, and every size of bet the old version offered is
 still offered (counters are kept at each). Counters that did not change need nothing
-said. `keros3ne-studio check <slug> --follows <the old game.json>` says whether an
+said. `rolarie-studio check <slug> --follows <the old game.json>` says whether an
 update passes, and the most rounding up gives away.
 
 A site installs a package only whole and only as it says it is: every file the one

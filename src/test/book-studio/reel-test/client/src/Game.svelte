@@ -10,9 +10,9 @@ Created: 2026-11-18
 -->
 <script lang="ts">
 	import { untrack } from "svelte";
-	import type { GameHost } from "@keros3ne/sdk/client";
-	import { provideEmitter } from "@keros3ne/sdk/emitter";
-	import { Views, type Shape } from "@keros3ne/sdk/views";
+	import type { GameHost } from "@rolarie/sdk/client";
+	import { provideEmitter } from "@rolarie/sdk/emitter";
+	import { Views, type Shape } from "@rolarie/sdk/views";
 	import { ReelTest } from "./game.svelte.ts";
 	import type { RoundView, StageEvent } from "./round.ts";
 	import TallView from "./TallView.svelte";

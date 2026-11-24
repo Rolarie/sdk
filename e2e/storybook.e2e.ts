@@ -1,5 +1,5 @@
 /**
- * The SDK's Storybook (`keros3ne-studio stories`), on the SDK's own test studio: that it
+ * The SDK's Storybook (`rolarie-studio stories`), on the SDK's own test studio: that it
  * shows the SDK's stories and the studio's, that a piece in a story is the piece itself
  * and can be worked, and that a story can play rounds from the studio's real books,
  * choice and all.

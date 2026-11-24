@@ -6,7 +6,7 @@
  * Created: 2026-11-17
  */
 
-import type { Meta, StoryObj } from "@keros3ne/sdk/stories";
+import type { Meta, StoryObj } from "@rolarie/sdk/stories";
 import GemsStory from "./GemsStory.svelte";
 
 const meta = {

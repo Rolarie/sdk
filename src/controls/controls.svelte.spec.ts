@@ -1,6 +1,6 @@
 /**
  * The control bar and the SDK's controls as Svelte components
- * (`@keros3ne/sdk/controls`), in a real browser: that the component is the SDK's
+ * (`@rolarie/sdk/controls`), in a real browser: that the component is the SDK's
  * bar, that it is made once and then kept to its props,
  * that what the player sets comes back, and that what is written inside it for the menu
  * lies in the bar's menu. The rules a bar is held to are in bar-rules.svelte.spec.ts:

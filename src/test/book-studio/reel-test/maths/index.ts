@@ -13,8 +13,8 @@
  * Created: 2026-11-18
  */
 
-import { defineBooks } from "@keros3ne/sdk/book-play";
-import { createRound } from "@keros3ne/sdk/slots";
+import { defineBooks } from "@rolarie/sdk/book-play";
+import { createRound } from "@rolarie/sdk/slots";
 import { STOPS, spinOf } from "./rules.ts";
 
 export default defineBooks({

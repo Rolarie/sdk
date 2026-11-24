@@ -6,7 +6,7 @@
  * Created: 2026-11-17
  */
 
-import type { Cell, Grid } from "@keros3ne/sdk/slots";
+import type { Cell, Grid } from "@rolarie/sdk/slots";
 
 export type Sym = "a" | "b" | "c" | "d";
 

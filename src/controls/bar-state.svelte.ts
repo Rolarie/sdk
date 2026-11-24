@@ -235,8 +235,8 @@ export class BarState {
 	}
 }
 
-const KEY = Symbol("keros3ne-bar");
-const PART = Symbol("keros3ne-bar-part");
+const KEY = Symbol("rolarie-bar");
+const PART = Symbol("rolarie-bar-part");
 
 /** Gives a bar's state to every item inside the component calling this. */
 export function provideBar(state: BarState): BarState {

@@ -7,7 +7,7 @@
  * Created: 2026-11-18
  */
 
-import type { BookView } from "@keros3ne/sdk/book-game";
+import type { BookView } from "@rolarie/sdk/book-game";
 import type { Spin, SymbolName } from "../../maths/rules";
 
 /** The round as the site reports it. */

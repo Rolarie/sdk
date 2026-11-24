@@ -7,7 +7,7 @@ Created: 2026-11-19
 -->
 <script lang="ts">
 	import { BET_ARRANGEMENTS, type BetArrangement } from "../bar-rules.ts";
-	import { formatKero } from "../kero.ts";
+	import { formatCoins } from "../coins.ts";
 	import type { SegmentLook } from "../look.ts";
 	import { dressItem, itemSize } from "./bar-item.ts";
 	import { getBar } from "./bar-state.svelte.ts";
@@ -38,7 +38,7 @@ Created: 2026-11-19
 			>
 				{name}
 			</span>{/each}
-	</span><output>{formatKero(bar.cost ?? bar.stake)}</output>{/snippet}
+	</span><output>{formatCoins(bar.cost ?? bar.stake)}</output>{/snippet}
 
 <div
 	class="sdk-bar-bet sdk-bar-segment"

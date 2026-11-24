@@ -13,7 +13,7 @@ import { dirname, join } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import { scanClientSource } from "./testing.ts";
 
-const root = mkdtempSync(join(tmpdir(), "keros3ne-client-scan-"));
+const root = mkdtempSync(join(tmpdir(), "rolarie-client-scan-"));
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 
 /** Writes a studio's files, and scans the client of its game. */
@@ -36,7 +36,7 @@ describe("a client's source", () => {
 			scan({
 				"game/client/src/Game.svelte": `<script lang="ts">
 	import { onMount } from "svelte";
-	import { Stage } from "@keros3ne/sdk/pixi";
+	import { Stage } from "@rolarie/sdk/pixi";
 	import { Texture } from "pixi.js";
 	import confetti from "canvas-confetti";
 	import Sheet from "@studio-name/kit/Sheet.svelte";
@@ -64,7 +64,7 @@ describe("a client's source", () => {
 		expect(
 			scan({
 				"game/client/src/Reels.stories.ts": `import type { Meta } from "@storybook/svelte-vite";\nimport ReelsStory from "./ReelsStory.svelte";`,
-				"game/client/src/ReelsStory.svelte": `<script lang="ts">\n\timport { Board } from "@keros3ne/sdk/slot";\n</script>`
+				"game/client/src/ReelsStory.svelte": `<script lang="ts">\n\timport { Board } from "@rolarie/sdk/slot";\n</script>`
 			})
 		).toEqual([]);
 	});

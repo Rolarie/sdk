@@ -10,15 +10,15 @@
  * Author: dwclake
  * Created: 2026-11-19
  */
-import type { BarHandle } from "@keros3ne/sdk/bar";
+import type { BarHandle } from "@rolarie/sdk/bar";
 import {
 	Refusal,
 	balanceBeforePayout,
-	formatKero,
+	formatCoins,
 	type GameHost
-} from "@keros3ne/sdk/client";
-import type { Emitter } from "@keros3ne/sdk/emitter";
-import { playEvents, type Handlers } from "@keros3ne/sdk/events";
+} from "@rolarie/sdk/client";
+import type { Emitter } from "@rolarie/sdk/emitter";
+import { playEvents, type Handlers } from "@rolarie/sdk/events";
 import { LINE_ROW, type Spin } from "../../maths/rules";
 import type { RoundView, RowEvent, StageEvent } from "./round.ts";
 import { NAMES } from "./symbols.ts";
@@ -59,7 +59,7 @@ export class ReelTest {
 			if (event.win)
 				await this.emitter.broadcast({
 					type: "reelsWin",
-					text: formatKero(playing.payout)
+					text: formatCoins(playing.payout)
 				});
 
 			playing.spin = event;
@@ -110,7 +110,7 @@ export class ReelTest {
 
 			this.say(
 				shown.win
-					? `Three of a kind, ${NAMES[shown.win.symbol]}: you won ${formatKero(round.payout)}.`
+					? `Three of a kind, ${NAMES[shown.win.symbol]}: you won ${formatCoins(round.payout)}.`
 					: `${line}. No win.`
 			);
 			// The result has been shown: the site may now show the new balance.

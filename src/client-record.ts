@@ -3,7 +3,7 @@
  * code is, with the SDK it was written for; the site never builds one, and never runs a
  * studio's code to make one. What was built is not committed. Its record is:
  * `client/client.json`, the digest of every file of it, written when it is built
- * (`keros3ne-studio client`) and committed, so that a tag says exactly which client it
+ * (`rolarie-studio client`) and committed, so that a tag says exactly which client it
  * sends. The built files travel in the game's package (./release-pack.ts),
  * and the site unpacks them beside the record and holds every file to it.
  *
@@ -25,7 +25,7 @@ import { isPlace } from "./tar.ts";
  * What a client built before its record said its protocol spoke: the SDK at 0.15, which
  * wrote no `protocol`, spoke this one.
  */
-const PROTOCOL_BEFORE_RECORDED = "keros3ne-game/2";
+const PROTOCOL_BEFORE_RECORDED = "rolarie-game/2";
 
 const recordSchema = v.strictObject({
 	/** The SDK the client was built with: said for people, and held to nothing. */
@@ -120,7 +120,7 @@ export function readClientRecord(gameFolder: string): ClientRecord {
 	const file = clientRecordFile(gameFolder);
 	if (!existsSync(file)) {
 		throw new Error(
-			`there is no client/client.json, the record of its built client: build it with keros3ne-studio client`
+			`there is no client/client.json, the record of its built client: build it with rolarie-studio client`
 		);
 	}
 
@@ -142,7 +142,7 @@ export function builtOnClones(gameFolder: string): string | null {
 	}
 
 	return conditions?.length
-		? `its client was built on packages taken from their clones (${conditions.join(", ")}), which no tag made: build it again with keros3ne-studio client, without them, before it is released`
+		? `its client was built on packages taken from their clones (${conditions.join(", ")}), which no tag made: build it again with rolarie-studio client, without them, before it is released`
 		: null;
 }
 
@@ -176,7 +176,7 @@ export function checkBuiltClient(gameFolder: string): string[] {
 	return problems.length > 0
 		? [
 				...problems.slice(0, 5),
-				"build it again and record it with: keros3ne-studio client"
+				"build it again and record it with: rolarie-studio client"
 			]
 		: [];
 }

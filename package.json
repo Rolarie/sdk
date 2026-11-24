@@ -1,13 +1,13 @@
 {
-	"name": "@keros3ne/sdk",
-	"version": "0.30.0",
-	"description": "Build games for Keros3ne: how a game's outcomes are made into books, the client's bridge to the site, the stage, the control bar and controls, Storybook, the site's own checks, and keros3ne-studio, the command line to make a game's books, check it and play it. Clone it to start a studio.",
+	"name": "@rolarie/sdk",
+	"version": "0.31.0",
+	"description": "Build games for Rolarie: how a game's outcomes are made into books, the client's bridge to the site, the stage, the control bar and controls, Storybook, the site's own checks, and rolarie-studio, the command line to make a game's books, check it and play it. Clone it to start a studio.",
 	"license": "MIT",
 	"type": "module",
 	"private": true,
 	"//": "Private so that it is never published to a registry: a studio clones this repository, and the site takes it at a git tag.",
 	"bin": {
-		"keros3ne-studio": "./src/cli.ts"
+		"rolarie-studio": "./src/cli.ts"
 	},
 	"exports": {
 		"./maths": "./src/maths.ts",
@@ -28,7 +28,7 @@
 		"./book-round": "./src/book-round.ts",
 		"./book-weights": "./src/book-weights.ts",
 		"./game-manifest": "./src/game-manifest.ts",
-		"./kero": "./src/kero.ts",
+		"./coins": "./src/coins.ts",
 		"./slots": "./src/slots.ts",
 		"./stake-steps": "./src/stake-steps.ts",
 		"./stories": "./src/stories.ts",
@@ -66,16 +66,16 @@
 	},
 	"imports": {
 		"#engine/*": {
-			"keros3ne-dev": "./local/engine/src/*.ts",
-			"default": "@keros3ne/engine/*"
+			"rolarie-dev": "./local/engine/src/*.ts",
+			"default": "@rolarie/engine/*"
 		},
 		"#engine/Views.svelte": {
-			"keros3ne-dev": "./local/engine/src/Views.svelte",
-			"default": "@keros3ne/engine/Views.svelte"
+			"rolarie-dev": "./local/engine/src/Views.svelte",
+			"default": "@rolarie/engine/Views.svelte"
 		},
 		"#engine/GameFrame.svelte": {
-			"keros3ne-dev": "./local/engine/src/GameFrame.svelte",
-			"default": "@keros3ne/engine/GameFrame.svelte"
+			"rolarie-dev": "./local/engine/src/GameFrame.svelte",
+			"default": "@rolarie/engine/GameFrame.svelte"
 		}
 	},
 	"scripts": {
@@ -90,10 +90,10 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
 		"test:browser": "bun node_modules/@playwright/test/cli.js install chromium && bun node_modules/@playwright/test/cli.js test",
-		"local": "KEROS3NE_DEV=1 BUN_OPTIONS=--conditions=keros3ne-dev NODE_OPTIONS=--conditions=keros3ne-dev bun run"
+		"local": "ROLARIE_DEV=1 BUN_OPTIONS=--conditions=rolarie-dev NODE_OPTIONS=--conditions=rolarie-dev bun run"
 	},
 	"dependencies": {
-		"@keros3ne/engine": "github:Keros3ne/engine#v0.11.1",
+		"@rolarie/engine": "github:Rolarie/engine#v0.12.0",
 		"@fontsource-variable/geist": "^5.3.0",
 		"@fontsource-variable/geist-mono": "^5.3.0",
 		"@noble/hashes": "^2.4.0",

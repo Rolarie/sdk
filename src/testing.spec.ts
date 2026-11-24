@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import { scanClient, scanMaths } from "./testing.ts";
 
-const root = mkdtempSync(join(tmpdir(), "keros3ne-sdk-"));
+const root = mkdtempSync(join(tmpdir(), "rolarie-sdk-"));
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 
 /** Writes files under a fresh folder of the scratch root, and gives the folder. */
@@ -21,7 +21,7 @@ function folder(files: Record<string, string>): string {
 describe("the site's checks, as a studio runs them", () => {
 	it("pass pure maths that imports what maths is written with, valibot and itself, and has its own test", () => {
 		const maths = folder({
-			"index.ts": `import * as v from "valibot";\nimport { defineBooks } from "@keros3ne/sdk/book-play";\nimport { createRound } from "@keros3ne/sdk/slots";\nimport type { Rng } from "@keros3ne/sdk/rng";\nimport { reels } from "./rules.ts";`,
+			"index.ts": `import * as v from "valibot";\nimport { defineBooks } from "@rolarie/sdk/book-play";\nimport { createRound } from "@rolarie/sdk/slots";\nimport type { Rng } from "@rolarie/sdk/rng";\nimport { reels } from "./rules.ts";`,
 			"rules.ts": "export const reels = [1, 2, 3];",
 			"maths.spec.ts": `import { readFileSync } from "node:fs";`
 		});
@@ -47,11 +47,11 @@ describe("the site's checks, as a studio runs them", () => {
 
 	it("find maths that reaches outside itself, draws its own randomness, or has no test", () => {
 		const maths = folder({
-			"index.ts": `import { connect } from "@keros3ne/sdk/client";\nexport const roll = () => Math.random();`,
+			"index.ts": `import { connect } from "@rolarie/sdk/client";\nexport const roll = () => Math.random();`,
 			"clock.ts": `import { x } from "../elsewhere";\nexport const now = Date.now();`
 		});
 		const problems = scanMaths(maths).join("\n");
-		expect(problems).toMatch(/imports "@keros3ne\/sdk\/client"/);
+		expect(problems).toMatch(/imports "@rolarie\/sdk\/client"/);
 		expect(problems).toMatch(/imports "\.\.\/elsewhere"/);
 		expect(problems).toMatch(/Math\.random/);
 		expect(problems).toMatch(/Date\.now/);
