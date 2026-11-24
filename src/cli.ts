@@ -7,6 +7,7 @@
  *   keros3ne-studio client [slug...]  build a game's client, and put what was built on record
  *   keros3ne-studio check [slug...]   the site's checks: books, guide, maths, client
  *   keros3ne-studio pack [slug...]    pack each game into the one file a studio sends of it
+ *   keros3ne-studio make [slug...]    all four, one after another: books, client, check, pack
  *   keros3ne-studio dev <slug>        play the game against a stand-in for the site
  *   keros3ne-studio stories           the studio's stories, and the SDK's own, in Storybook
  *
@@ -48,6 +49,10 @@ Usage:
                                     sends of it: <slug>-<version>.tar.gz, with its
                                     game.json, guide.json and card, its client as
                                     built, its books and any assets
+  keros3ne-studio make [slug...]    all four of those, one after another: each game's
+                                    books made, its client built, the checks run and
+                                    the game packed. Stops at the first that fails,
+                                    with nothing packed
   keros3ne-studio dev <slug>        build the client as it changes, and play the game in a
                                     browser against a stand-in for the site
 
@@ -57,8 +62,8 @@ Usage:
 
 Options:
   --root <folder>    the studio's folder, with its studio.json (default: here)
-  --workers <number> books: how many workers to play on (default: one for each core)
-  --trial            pack: pack a client built on packages from their clones too, for
+  --workers <number> books, make: how many workers to play on (default: one for each core)
+  --trial            pack, make: pack a client built on packages from their clones too, for
                      trying a game. A game to publish is never packed with it
   --follows <file>   check: the game.json of the version this one is to follow on a
                      site. Says whether it may: its version comes after, it keeps
@@ -67,7 +72,7 @@ Options:
                      game only: a release is never checked with it
   --build            check: build each client again first, and hold what the source
                      builds now to the record
-  --out <folder>     pack: where the file goes (default: release)
+  --out <folder>     pack, make: where the file goes (default: release)
   --port <number>    dev: where to serve it (default: 4280); stories: (default: 6006)
   --build <folder>   stories: build them as a site into this folder, and stop
   --balance <amount> dev: the pretend balance to start with (default: 25.00)
@@ -459,6 +464,49 @@ async function buildAllClients(root: string, slugs: string[]): Promise<number> {
 	return failed ? 1 : 0;
 }
 
+/** How many workers `--workers` asks for: none said is `undefined`, and a number that cannot be one is `null`. */
+function workersOf(said: string | true | undefined): number | undefined | null {
+	if (said === undefined) return undefined;
+
+	const workers = Number(said);
+
+	return Number.isInteger(workers) && workers >= 0 ? workers : null;
+}
+
+/**
+ * Makes each game asked for, or every game the studio has, from its source to the one
+ * file a studio sends of it: its books, its client, the site's checks, and the package,
+ * one after another. Stops at the first step that fails, so nothing is packed of a game
+ * that did not pass.
+ */
+async function makeAllGames(
+	root: string,
+	slugs: string[],
+	options: { workers?: number; out: string; trial: boolean }
+): Promise<number> {
+	const steps: [string, () => Promise<number>][] = [
+		["books", () => makeAllBooks(root, slugs, options.workers)],
+		["client", () => buildAllClients(root, slugs)],
+		["check", () => check(root, slugs)],
+		["pack", () => packAllGames(root, slugs, options.out, options.trial)]
+	];
+
+	for (const [step, run] of steps) {
+		console.log(`\n== ${step} ==`);
+
+		const code = await run();
+		if (code !== 0) {
+			console.error(
+				`\nStopped at ${step}: nothing was packed. Put right what it says, and run make again.`
+			);
+
+			return code;
+		}
+	}
+
+	return 0;
+}
+
 async function main(argv: string[]): Promise<number> {
 	const { command, slugs, options } = parse(argv);
 	const root = resolve(typeof options.root === "string" ? options.root : ".");
@@ -529,15 +577,25 @@ async function main(argv: string[]): Promise<number> {
 				),
 				"trial" in options
 			);
-		case "books": {
-			const workers =
-				options.workers === undefined ? undefined : Number(options.workers);
-			if (workers !== undefined && (!Number.isInteger(workers) || workers < 0)) {
+		case "books":
+		case "make": {
+			const workers = workersOf(options.workers);
+			if (workers === null) {
 				console.error("--workers is a whole number: 0 plays without any.");
 				return 1;
 			}
 
-			return makeAllBooks(root, slugs, workers);
+			return command === "books"
+				? makeAllBooks(root, slugs, workers)
+				: makeAllGames(root, slugs, {
+						workers,
+						out: resolve(
+							typeof options.out === "string"
+								? options.out
+								: join(root, "release")
+						),
+						trial: "trial" in options
+					});
 		}
 		case "dev":
 		case "dev-serve": {

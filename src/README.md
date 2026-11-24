@@ -735,6 +735,11 @@ machine: `keros3ne-studio` reads and writes the files of your repository and no 
    anything, so commit that record and `books/books.json` with the change.
 3. Run `keros3ne-studio pack <slug>`, and send Keros3ne the file.
 
+`keros3ne-studio make <slug>` does the commands of steps 2 and 3 in one: the game's books
+made, its client built, the checks run and the game packed, one after another, stopping
+at the first that fails with nothing packed. Your own tests are still yours to run, and
+the two records still yours to commit.
+
 **Each game is sent by itself**, at its own version, however many games you make.
 
 **An update to a game with counters** must say what becomes of what players hold in

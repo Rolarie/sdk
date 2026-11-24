@@ -1,5 +1,5 @@
 {
-	"sdk": "0.29.1",
+	"sdk": "0.30.0",
 	"protocol": "keros3ne-game/3",
 	"files": {
 		"_app/immutable/assets/2.KHod19xi.css": "9c6c50230b1b19ea2aa9269e294b6d3bbdc9ea1221fbb4620430c7b43ea3f915",
